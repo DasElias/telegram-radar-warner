@@ -8,6 +8,8 @@ from waitress import serve
 
 load_dotenv();
 
+api = Flask(__name__)
+
 wasStarted = False
 allMessages = []
 lock = threading.RLock()
@@ -52,11 +54,13 @@ def telegramServer():
     client.run_until_disconnected()
 
 def webServer():
-  api = Flask(__name__)
 
-  def try_parse_int(s, base=10, val=None):
+  def try_parse_int(s, val=None):
+    if s is None:
+      return val
+
     try:
-      return int(s, base)
+      return int(s)
     except ValueError:
       return val
 
