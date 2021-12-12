@@ -138,8 +138,5 @@ def webServer():
 
 if __name__=='__main__':
   t1 = threading.Thread(target=telegramServer, name="Telegram")
-  t2 = threading.Thread(target=webServer, name="Web")
   t1.start()
-  t2.start()
-  t1.join()
-  t2.join()
+  webServer()
