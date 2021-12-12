@@ -2,12 +2,16 @@ import os
 from dotenv import load_dotenv
 import threading, queue
 from telethon import TelegramClient, events, sync
+from telethon.tl.types import ChannelParticipantsAdmins
 import hypercorn.asyncio
-from quart import Quart, request
+from quart import Quart, request, json
 
-load_dotenv();
+# Load environment variables
+load_dotenv()
 
+# Global variables
 wasStarted = False
+adminUserIds = []
 allMessages = []
 lock = threading.RLock()
 q = queue.Queue()
@@ -18,29 +22,40 @@ async def get_code():
   code = q.get()
   return code;
 
+def should_filter(message):
+  return message.from_id.user_id in adminUserIds
+
+# Enable connection
 api_id = os.getenv("API_ID")
 api_hash = os.getenv("API_HASH")
 phone_number = os.getenv("PHONE_NUMBER")
 channel_username=os.getenv("CHANNEL")
 client = TelegramClient('RadarWarner', api_id, api_hash)
 client.start(phone_number, code_callback=get_code)
-
 wasStarted = True
 
+# Get chat entity
 chat = client.get_entity(channel_username)
 
-
+# Listen for new messages
 @client.on(events.NewMessage(incoming=True, chats=chat))
 async def handler(event):
-  print(event.stringify())
+  print("new message received")
   with lock:
-    allMessages.insert(0, event.message)
-    print("new message received")
+    message = event.message
+    if not should_filter(message):
+      allMessages.insert(0, message)
 
+# Get admins
+for part in client.iter_participants(chat, filter=ChannelParticipantsAdmins):
+  adminUserIds.append(part.id)    
+
+# Get recent messages
 for message in client.get_messages(chat, limit=11):
   with lock:
-    allMessages.append(message)
-    print(message.stringify())
+    if not should_filter(message):
+      allMessages.append(message)
+    
 
 
 
@@ -115,7 +130,7 @@ def route_get_messages_text():
 @api.route('/login', methods=['GET'])
 def route_login():
   if wasStarted:
-    return "Server is already running";
+    return "Server is already running"
 
   try:
     key = request.args.get("key")
