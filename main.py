@@ -53,7 +53,10 @@ def telegramServer():
   with client:
     client.run_until_disconnected()
 
-def webServer():
+if __name__=='__main__':
+  t1 = threading.Thread(target=telegramServer, name="Telegram")
+  t1.start()
+  
 
   def try_parse_int(s, val=None):
     if s is None:
@@ -136,7 +139,6 @@ def webServer():
   serve(api, port=port)
 
 
-if __name__=='__main__':
-  t1 = threading.Thread(target=telegramServer, name="Telegram")
-  t1.start()
-  webServer()
+
+
+
