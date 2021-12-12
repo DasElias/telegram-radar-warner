@@ -4,6 +4,7 @@ import threading, queue
 from telethon import TelegramClient, events, sync
 import asyncio
 from flask import Flask, json, request
+from waitress import serve
 
 load_dotenv();
 
@@ -127,7 +128,8 @@ def webServer():
     except queue.Full:
       return "Queue is already full."  
 
-  api.run() 
+  port = os.getenv("PORT");
+  serve(api, port=port);
 
 
 if __name__=='__main__':

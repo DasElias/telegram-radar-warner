@@ -24,3 +24,7 @@ pip install python-dotenv
 ```
 pip install Flask
 ```
+- waitress
+```
+pip install waitress
+```
