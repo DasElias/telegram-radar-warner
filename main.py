@@ -2,13 +2,10 @@ import os
 from dotenv import load_dotenv
 import threading, queue
 from telethon import TelegramClient, events, sync
-import asyncio
-from flask import Flask, json, request
-from waitress import serve
+import hypercorn.asyncio
+from quart import Quart, request
 
 load_dotenv();
-
-api = Flask(__name__)
 
 wasStarted = False
 allMessages = []
@@ -17,44 +14,39 @@ q = queue.Queue()
 defaultElemsReturned=5
 
 # Telegram Server
-def telegramServer():
-  loop = asyncio.new_event_loop()
-  asyncio.set_event_loop(loop)
+async def get_code():
+  code = q.get()
+  return code;
 
-  async def get_code():
-    code = q.get()
-    return code;
+api_id = os.getenv("API_ID")
+api_hash = os.getenv("API_HASH")
+phone_number = os.getenv("PHONE_NUMBER")
+channel_username=os.getenv("CHANNEL")
+client = TelegramClient('RadarWarner', api_id, api_hash)
+client.start(phone_number, code_callback=get_code)
 
-  api_id = os.getenv("API_ID")
-  api_hash = os.getenv("API_HASH")
-  phone_number = os.getenv("PHONE_NUMBER")
-  channel_username=os.getenv("CHANNEL")
-  client = TelegramClient('RadarWarner', api_id, api_hash)
-  client.start(phone_number, code_callback=get_code)
+wasStarted = True
 
-  global wasStarted
-  wasStarted = True
-
-  chat = client.get_entity(channel_username)
+chat = client.get_entity(channel_username)
 
 
-  @client.on(events.NewMessage(incoming=True, chats=chat))
-  async def handler(event):
-    print(event.stringify())
-    with lock:
-      allMessages.insert(0, event.message)
-      print("new message received")
+@client.on(events.NewMessage(incoming=True, chats=chat))
+async def handler(event):
+  print(event.stringify())
+  with lock:
+    allMessages.insert(0, event.message)
+    print("new message received")
 
-  for message in client.get_messages(chat, limit=11):
-    with lock:
-      allMessages.append(message)
-      print(message.stringify())
+for message in client.get_messages(chat, limit=11):
+  with lock:
+    allMessages.append(message)
+    print(message.stringify())
 
 
-  with client:
-    client.run_until_disconnected()
 
 # Web Server
+api = Quart(__name__)
+
 def try_parse_int(s, val=None):
   if s is None:
     return val
@@ -98,7 +90,7 @@ def get_messages_human_readable(elems):
       resultString += "\"\t"
 
     resultString += m["message"]
-    resultString += "\r\n"
+    resultString += "<br>"
     resultString += "\r\n"
   return resultString;  
 
@@ -132,14 +124,12 @@ def route_login():
   except queue.Full:
     return "Queue is already full."  
 
-if __name__=='__main__':
-  t1 = threading.Thread(target=telegramServer, name="Telegram")
-  t1.start()
-
-  port = os.getenv("PORT")
-  serve(api, port=port)
 
 
+async def main():
+  await hypercorn.asyncio.serve(api, hypercorn.Config())
 
 
+if __name__ == '__main__':
+  client.loop.run_until_complete(main())
 
