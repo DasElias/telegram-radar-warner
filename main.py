@@ -132,8 +132,8 @@ def webServer():
     except queue.Full:
       return "Queue is already full."  
 
-  port = os.getenv("PORT");
-  serve(api, port=port);
+  port = os.getenv("PORT")
+  serve(api, port=port)
 
 
 if __name__=='__main__':
