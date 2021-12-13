@@ -20,7 +20,7 @@ defaultElemsReturned=5
 # Telegram Server
 async def get_code():
   code = q.get()
-  return code;
+  return code
 
 def should_filter(message):
   return message.from_id.user_id in adminUserIds
@@ -76,7 +76,7 @@ def getMessageById(id):
   return getattr(elem, "message", None)
 
 def mapMessage(msg):
-  replyMessage = None;
+  replyMessage = None
 
   if msg.reply_to is not None:
     replyMessage = getMessageById(msg.reply_to.reply_to_msg_id)
@@ -107,7 +107,7 @@ def get_messages_human_readable(elems):
     resultString += m["message"]
     resultString += "<br>"
     resultString += "\r\n"
-  return resultString;  
+  return resultString 
 
 @api.route('/messages/json', methods=['GET'])
 def route_get_messages_json():
