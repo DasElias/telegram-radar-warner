@@ -20,11 +20,11 @@ python3 -m pip install --upgrade telethon
 ```
 pip install python-dotenv
 ```
-- flask
+- pytz
 ```
-pip install Flask
+pip install pytz
 ```
-- waitress
+- quart
 ```
-pip install waitress
+pip install quart
 ```

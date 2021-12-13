@@ -5,6 +5,8 @@ from telethon import TelegramClient, events, sync
 from telethon.tl.types import ChannelParticipantsAdmins
 import hypercorn.asyncio
 from quart import Quart, request, json
+import pytz
+from pytz import timezone
 
 # Load environment variables
 load_dotenv()
@@ -16,6 +18,7 @@ allMessages = []
 lock = threading.RLock()
 q = queue.Queue()
 defaultElemsReturned=5
+tz = timezone(os.getenv("TIMEZONE"))
 
 # Telegram Server
 async def get_code():
@@ -84,7 +87,7 @@ def mapMessage(msg):
   return {
     "message": msg.message,
     "id": msg.id,
-    "date": msg.date,
+    "date": msg.date.replace(tzinfo=pytz.utc).astimezone(tz),
     "replyMessage": replyMessage
   }
 
