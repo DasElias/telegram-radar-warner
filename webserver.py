@@ -1,14 +1,14 @@
-from quart import Quart, request, json
+from Aeros import WebServer
+from Aeros.misc import jsonify
+from quart import request
 import os
 import queue
-import hypercorn.asyncio
 import helpers
 import pytz
 from pytz import timezone
 import shared
 from shared import all_messages, confirmation_code_queue
 
-api = Quart(__name__)
 tz = timezone(os.getenv("TIMEZONE"))
 default_elems_returned = int(os.getenv("DEFAULT_ELEMS_RETURNED"))
 
@@ -53,35 +53,35 @@ def get_messages_human_readable(elems):
 
 
 
-@api.route('/messages/json', methods=['GET'])
-def route_get_messages_json():
-  if not shared.was_started:
-    return json.dumps({
-      "message": "Please login first."
-    })
 
-  elems = helpers.try_parse_int(request.args.get("elems")) or default_elems_returned
-  return json.dumps(get_all_messages(elems))
-    
-@api.route('/messages/text', methods=['GET'])
-def route_get_messages_text():
-  if not shared.was_started:
-    return "Bitte bestätige zuerst deinen Anmeldecode."
 
-  elems = helpers.try_parse_int(request.args.get("elems")) or default_elems_returned
-  return get_messages_human_readable(elems)    
+def web_server(api):
+  @api.route('/messages/json', methods=['GET'])
+  async def route_get_messages_json():
+    if not shared.was_started:
+      return jsonify({
+        "message": "Please login first."
+      })
 
-@api.route('/login', methods=['GET'])
-def route_login():
-  if shared.was_started:
-    return "Server is already running"
+    elems = helpers.try_parse_int(request.args.get("elems")) or default_elems_returned
+    return jsonify(get_all_messages(elems))
+      
+  @api.route('/messages/text', methods=['GET'])
+  async def route_get_messages_text():
+    if not shared.was_started:
+      return "Bitte bestätige zuerst deinen Anmeldecode."
 
-  try:
-    key = request.args.get("key")
-    confirmation_code_queue.put_nowait(key)
-    return "Key placed"
-  except queue.Full:
-    return "Queue is already full."  
+    elems = helpers.try_parse_int(request.args.get("elems")) or default_elems_returned
+    return get_messages_human_readable(elems)    
 
-async def web_server():
-  await hypercorn.asyncio.serve(api, hypercorn.Config())
+  @api.route('/login', methods=['GET'])
+  async def route_login():
+    if shared.was_started:
+      return "Server is already running"
+
+    try:
+      key = request.args.get("key")
+      confirmation_code_queue.put_nowait(key)
+      return "Key placed"
+    except queue.Full:
+      return "Queue is already full."  

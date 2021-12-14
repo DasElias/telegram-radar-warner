@@ -24,7 +24,7 @@ pip install python-dotenv
 ```
 pip install pytz
 ```
-- quart
+- Aeros
 ```
-pip install quart
+pip install Aeros==0.3.1
 ```
