@@ -7,15 +7,16 @@ import helpers
 import pytz
 from pytz import timezone
 import shared
-from shared import all_messages, confirmation_code_queue
+from shared import all_messages, all_messages_mutex, confirmation_code_queue
 
 tz = timezone(os.getenv("TIMEZONE"))
 default_elems_returned = int(os.getenv("DEFAULT_ELEMS_RETURNED"))
 max_message_length = int(os.getenv("MAX_MESSAGE_LENGTH"))
 
 def getMessageById(id):
-  elem = next((m for m in all_messages if m.id == id), None)
-  return getattr(elem, "message", None)
+  with all_messages_mutex:
+    elem = next((m for m in all_messages if m.id == id), None)
+    return getattr(elem, "message", None)
 
 def truncate_message(msg):
   if msg is None:
@@ -54,7 +55,8 @@ def mapMessage(msg):
   }  
 
 def get_all_messages(elems):
-  return list(map(mapMessage, all_messages[:elems]))
+  with all_messages_mutex:
+    return list(map(mapMessage, all_messages[:elems]))
 
 def get_messages_human_readable(elems):
   result_string = ""
@@ -71,7 +73,7 @@ def get_messages_human_readable(elems):
 def web_server(api):
   @api.route('/messages/json', methods=['GET'])
   async def route_get_messages_json():
-    if not shared.was_started:
+    if not shared.is_logged_in():
       return jsonify({
         "message": "Please login first."
       })
@@ -81,15 +83,17 @@ def web_server(api):
       
   @api.route('/messages/text', methods=['GET'])
   async def route_get_messages_text():
-    if not shared.was_started:
+    print("a")
+    if not shared.is_logged_in():
       return "Bitte bestätige zuerst deinen Anmeldecode."
+    print("b")
 
     elems = helpers.try_parse_int(request.args.get("elems")) or default_elems_returned
     return get_messages_human_readable(elems)    
 
   @api.route('/login', methods=['GET'])
   async def route_login():
-    if shared.was_started:
+    if shared.is_logged_in():
       return "Server is already running"
 
     try:

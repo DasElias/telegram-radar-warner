@@ -3,7 +3,7 @@ from telethon import TelegramClient, events, sync
 from telethon.tl.types import ChannelParticipantsAdmins
 
 import shared
-from shared import all_messages, confirmation_code_queue, was_started
+from shared import all_messages, all_messages_mutex, confirmation_code_queue, on_successful_login
 
 phone_number = os.getenv("PHONE_NUMBER")
 channel_username=os.getenv("CHANNEL")
@@ -21,8 +21,7 @@ def should_filter(message):
 
 async def telegram_server(client):
   await client.start(phone_number, code_callback=get_confirmation_code)
-
-  shared.was_started = True
+  on_successful_login()
 
   # Get chat entity
   chat = await client.get_entity(channel_username)
@@ -32,7 +31,8 @@ async def telegram_server(client):
   async def handler(event):
     message = event.message
     if not should_filter(message):
-      all_messages.insert(0, message)
+      with all_messages_mutex:
+        all_messages.insert(0, message)
       print(message.stringify())
 
   async for part in client.iter_participants(chat, filter=ChannelParticipantsAdmins):
@@ -40,5 +40,6 @@ async def telegram_server(client):
 
   async for message in client.iter_messages(chat, limit=default_elems_fetched):
     if not should_filter(message):
-      all_messages.append(message)
+      with all_messages_mutex:
+        all_messages.append(message)
 
