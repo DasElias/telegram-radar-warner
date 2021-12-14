@@ -7,6 +7,7 @@ from shared import all_messages, confirmation_code_queue, was_started
 
 phone_number = os.getenv("PHONE_NUMBER")
 channel_username=os.getenv("CHANNEL")
+default_elems_fetched = int(os.getenv("DEFAULT_ELEMS_FETCHED"))
 
 admin_user_ids = []
 
@@ -37,8 +38,7 @@ async def telegram_server(client):
   async for part in client.iter_participants(chat, filter=ChannelParticipantsAdmins):
     admin_user_ids.append(part.id)   
 
-  async for message in client.iter_messages(chat, limit=11):
+  async for message in client.iter_messages(chat, limit=default_elems_fetched):
     if not should_filter(message):
       all_messages.append(message)
-      print(message.stringify())
 
