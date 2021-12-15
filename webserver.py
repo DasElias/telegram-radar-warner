@@ -5,7 +5,8 @@ import os
 import queue
 import helpers
 import pytz
-from pytz import timezone
+from pytz import timezone#
+import replacements
 import shared
 from shared import all_messages, all_messages_mutex, confirmation_code_queue
 
@@ -37,6 +38,7 @@ def mapMessage(msg):
   reply_message = None
   if msg.reply_to is not None:
     reply_message = truncate_message(getMessageById(msg.reply_to.reply_to_msg_id))
+    reply_message = replacements.replace_message(reply_message)
   
   # Build parsed message
   parsed_message = date.strftime("%H:%M") + "\t "
@@ -44,7 +46,7 @@ def mapMessage(msg):
   if reply_message is not None:
     parsed_message += "Antwort auf\"" + reply_message + "\"\t "
 
-  parsed_message += truncated_orig_message
+  parsed_message += replacements.replace_message(truncated_orig_message)
 
   return {
     "originalMessage": truncated_orig_message,
