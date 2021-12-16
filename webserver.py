@@ -57,7 +57,7 @@ def get_additional_messages_object(only_media_messages):
   if length > 0:
     time_list = list(map(lambda msg: msg["timeString"], only_media_messages))
 
-    msg = get_additional_messages_prefix(only_media_messages) + " um " + utils.to_human_readable_list(time_list)
+    msg = get_additional_messages_prefix(only_media_messages) + " um " + utils.to_human_readable_list(time_list) + " empfangen"
     return {
       "originalMessage": None,
       "id": None,
@@ -87,7 +87,7 @@ def get_additional_messages_prefix(only_media_messages):
       return "Weitere Sprachnachrichten"
     if all(msg["type"] == "photo" for msg in only_media_messages):
       return "Weitere Bilder"
-    return "Weiter Sprachnachrichten und Bilder"
+    return "Weitere Sprachnachrichten und Bilder"
   return None
 
 def append_or_concat_message(list, new_msg):
