@@ -29,8 +29,8 @@ def replace_message(str):
 
 def _replace_message_impl(str, prefix, suffix):
   for r in _replacements:
-    repl_from = prefix + r["from"] + suffix
-    repl_to = prefix + r["to"] + suffix
+    repl_from = prefix + r["from"].strip() + suffix
+    repl_to = prefix + r["to"].strip() + suffix
     str = replace_case_insensitive(str, repl_from, repl_to)
 
   return str  
