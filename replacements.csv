@@ -5,6 +5,7 @@ andre,andere
 bds,beidseitig
 bede,beide
 bede,beide
+blaua,blauer
 bsetzt,besetzt
 din,drinnen
 dina,drinnen
@@ -18,7 +19,10 @@ eppas,etwas
 füf,fünf
 füfe,fünf
 gad,gerade
+graua,grauer
+grüana,grüner
 gspeert,gesperrt
+ihne ,hinein
 inne,hinein
 irgat,irgendeine
 isch,ist
@@ -35,6 +39,7 @@ net,nicht
 netta,nicht
 nöd,nicht
 noham,Nach dem
+nüm,nicht mehr
 nüne,neun
 o,auch
 o,auch
@@ -43,6 +48,8 @@ oana,einer
 oaner,einer
 reachts,rechts
 rechta,rechten
+rota,roter
+schwarza,schwarzer
 se,sie
 sechse,sechs
 siebne,sieben
@@ -55,27 +62,26 @@ umma,herum
 ungf.,ungefähr
 usa,heraus
 ussa,heraus
+usse,hinaus
+ussi,hinaus
 uswärtig,auswärtig
 uswärts,auswärts
 viere,vier
+vrschteckt,versteckt
+vrsteckt,versteckt
+widr,wieder
 z,in
 zehne,zehn
 zemm,zusammen
 zemma,zusammen
+zivieler,ziviler
 zruck,zurück
 zua,zu
 zwoa,zwei
 zwölfe,zwölf
-vrsteckt,versteckt
-vrschteckt,versteckt
-graua,grauer
-schwarza,schwarzer
-rota,roter
-grüana,grüner
-blaua,blauer
-zivieler,ziviler
-nüm,nicht mehr
-widr,wieder
+ghörig,ordentlich
+hintre,nach hinten
+ggü.,gegenüber
 Abschtand,Abstandsmessung
 abstandsmessig,Abstandsmessung
 Afang,Anfang
@@ -122,6 +128,16 @@ polizista,Polizisten
 tankstell,Tankstelle
 kaserna,Kaserne
 lüt,Leute
+tünnel,Tunnel
+lada,Laden
+karra,Karra
+gaschthus,Gasthaus
+poscht,Post
+Apothek,Apotheke
+krüzig,Kreuzung
+autobahnuffahrt ,Autobahnauffahrt
+radarböxle,Radarbox
+böxle,Box
 AT,Österreich
 Bludaz,Bludenz
 Breagaz,Bregenz
@@ -162,6 +178,7 @@ schruu,Schuns
 tschaggu,Tschagguns
 bürsch,Bürs
 partena,Partenen
+bludaz,Bludenz
 annegfahra,hingefahren
 annegfara,hingefahren
 beobachta,beobachten
@@ -212,3 +229,18 @@ grumt,geräumt
 züha,ziehen
 bstellt,bestellt
 abgholt,abgeholt
+krüzan,kreuzen
+gschneallt,geknallt
+schüßa,schießen
+schüssa,schießen
+innegschossa,hineingeschossen
+ussegschossa,hinausgeschossen
+innegschoßa,hineingeschossen
+ussegschoßa,hineingeschossen
+ufheba,aufhalten
+aheba,anhalten
+aghoba,angehalten
+ufghoba,aufgehalten
+reua,reuen
+goht,gehen
+zühen,ziehen
