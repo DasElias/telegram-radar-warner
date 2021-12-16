@@ -1,4 +1,3 @@
-import replacements
 import os
 from dotenv import load_dotenv
 
@@ -9,9 +8,12 @@ from telethon import TelegramClient
 from Aeros import WebServer, AdvancedThread
 from webserver import web_server
 from telegram import telegram_server
+import replacements
+import filtering
 
-# Init replacements
+# Init replacements and filtering
 replacements.init_replacements()
+filtering.init_filtering()
 
 # Enable connection
 api_id = os.getenv("API_ID")

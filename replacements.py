@@ -1,4 +1,5 @@
 import csv
+from utils import replace_case_insensitive
 
 _replacements = []
 
@@ -30,17 +31,9 @@ def _replace_message_impl(str, prefix, suffix):
   for r in _replacements:
     repl_from = prefix + r["from"] + suffix
     repl_to = prefix + r["to"] + suffix
-    str = _replace_case_insensitive(str, repl_from, repl_to)
+    str = replace_case_insensitive(str, repl_from, repl_to)
 
   return str  
 
 
-def _replace_case_insensitive(text, old, new):
-  idx = 0
-  while idx < len(text):
-    index_l = text.lower().find(old.lower(), idx)
-    if index_l == -1:
-      return text
-    text = text[:index_l] + new + text[index_l + len(old):]
-    idx = index_l + len(new) 
-  return text  
+ 
