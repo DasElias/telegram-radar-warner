@@ -92,8 +92,8 @@ def get_all_messages(elems):
   with all_messages_mutex:
     i = 0
     min_date = tz.localize(datetime.now()) - timedelta(hours = 1.5)
-    is_latest_date_after_min = True
-    while (len(filtered_messsages) < elems or is_latest_date_after_min) and len(all_messages) > i:
+    is_next_date_after_min = True
+    while (len(filtered_messsages) < elems or is_next_date_after_min) and len(all_messages) > i:
       msg = all_messages[i]
 
       reply_to_msg = None
@@ -107,8 +107,8 @@ def get_all_messages(elems):
         else:
           filtered_messsages.append(mapped)
 
-      is_latest_date_after_min = msg.date > min_date
-      i = i + 1  
+      i = i + 1
+      is_next_date_after_min = len(all_messages) > i and all_messages[i].date > min_date  
 
     additional_msg = get_additional_messages_object(only_media_messages)
     if additional_msg is not None:
