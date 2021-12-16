@@ -33,7 +33,7 @@ def mapMessage(msg):
   
   # Build parsed message
   time_string = date.strftime("%H:%M")
-  parsed_message = time_string + "\t "
+  parsed_message = ""
 
   if reply_message is not None:
     parsed_message += "Antwort auf \"" + reply_message + "\"\t "
@@ -41,13 +41,15 @@ def mapMessage(msg):
   parsed_message += replaced_message
 
   return {
-    "originalMessage": truncated_orig_message,
     "id": msg.id,
-    "date": date,
+    "dateTime": date,
+    "type": shared.get_message_type(msg),
+    "userId": msg.from_id.user_id,
+    "originalMessage": msg.message,
     "timeString": time_string,
-    "replyMessage": reply_message,
-    "parsedMessage": parsed_message,
-    "type": shared.get_message_type(msg)
+    "replyToMessage": reply_message,
+    "parsedMessage": time_string + "\t " + parsed_message,
+    "parsedMessageWithoutTime": parsed_message
   }  
 
 def get_additional_messages_object(only_media_messages):
@@ -55,14 +57,17 @@ def get_additional_messages_object(only_media_messages):
   if length > 0:
     time_list = list(map(lambda msg: msg["timeString"], only_media_messages))
 
+    msg = get_additional_messages_prefix(only_media_messages) + " um " + utils.to_human_readable_list(time_list)
     return {
       "originalMessage": None,
       "id": None,
       "date": None,
       "timeString": None,
       "replyMessage": None,
-      "parsedMessage": get_additional_messages_prefix(only_media_messages) + " um " + utils.to_human_readable_list(time_list),
-      "type": "summary"
+      "parsedMessage": msg,
+      "parsedMessageWithoutTime": msg,
+      "type": "summary",
+      "userId": None
     }
   else:
     return None  
@@ -85,6 +90,21 @@ def get_additional_messages_prefix(only_media_messages):
     return "Weiter Sprachnachrichten und Bilder"
   return None
 
+def append_or_concat_message(list, new_msg):
+  if len(list) > 0:
+    last_msg = list[-1]
+    if last_msg["userId"] == new_msg["userId"]:
+      last_msg["id"] = [new_msg["id"], last_msg["id"]]
+      last_msg["type"] = [new_msg["type"], last_msg["type"]]
+      last_msg["parsedMessage"] = new_msg["parsedMessage"] + " - " + last_msg["parsedMessageWithoutTime"]
+      last_msg["parsedMessageWithoutTime"] = new_msg["parsedMessageWithoutTime"] + " - " + last_msg["parsedMessageWithoutTime"]
+      last_msg["originalMessage"] = new_msg["originalMessage"] + " - " + last_msg["originalMessage"]
+      # userId don't needs to be updated
+      # time and date neither
+      return
+
+  list.append(new_msg)  
+
 def get_all_messages(elems):
   only_media_messages = []
   filtered_messsages = []
@@ -105,7 +125,7 @@ def get_all_messages(elems):
         if shared.is_multimedia_message_without_content(msg):
           only_media_messages.append(mapped)
         else:
-          filtered_messsages.append(mapped)
+          append_or_concat_message(filtered_messsages, mapped)
 
       i = i + 1
       is_next_date_after_min = len(all_messages) > i and all_messages[i].date > min_date  
