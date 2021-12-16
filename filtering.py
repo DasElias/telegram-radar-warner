@@ -19,7 +19,8 @@ def _read_csv(filename):
 def should_filter(message, content, repliedToMessage):
   return _was_sent_by_admin(message) or \
           _was_sent_by_admin(repliedToMessage) or \
-          _has_no_content(message.message) or \
+          _has_no_content(message) or \
+          _has_no_content(repliedToMessage) or \
           _contains_forbidden_string(content) or \
           _was_already_answered(message)
 
@@ -28,7 +29,11 @@ def _was_sent_by_admin(msg):
     return False
   return shared.is_admin(msg.from_id.user_id)
 
-def _has_no_content(content):
+def _has_no_content(msg):
+  if msg is None:
+    return False
+
+  content = shared.get_message_content(msg) 
   return content is None or len(content) == 0  
 
 def _was_already_answered(msg):

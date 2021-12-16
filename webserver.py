@@ -9,34 +9,24 @@ import pytz
 from pytz import timezone#
 import replacements
 import shared
-from shared import all_messages, all_messages_mutex, confirmation_code_queue
+from shared import all_messages, all_messages_mutex, confirmation_code_queue, get_message_content
 from filtering import should_filter
 
 tz = timezone(os.getenv("TIMEZONE"))
 default_elems_returned = int(os.getenv("DEFAULT_ELEMS_RETURNED"))
-max_message_length = int(os.getenv("MAX_MESSAGE_LENGTH"))
 
 
-def truncate_message(msg):
-  if msg is None:
-    return None
 
-  # 3 characters are appended
-  truncate_behind = max_message_length + 3
-  if(len(msg) > truncate_behind):
-    msg = msg[:truncate_behind] + "..."  
-    
-  return msg
 
 def mapMessage(msg):
   date = msg.date.replace(tzinfo=pytz.utc).astimezone(tz)
-  truncated_orig_message = truncate_message(msg.message)
+  truncated_orig_message = get_message_content(msg)
   replaced_message = replacements.replace_message(truncated_orig_message)
 
   # Build reply message
   reply_message = None
   if msg.reply_to is not None:
-    reply_message = truncate_message(shared.get_message_text_by_id(msg.reply_to.reply_to_msg_id))
+    reply_message = get_message_content(shared.get_message_by_id(msg.reply_to.reply_to_msg_id))
     reply_message = replacements.replace_message(reply_message)
   
   # Build parsed message
