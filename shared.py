@@ -26,7 +26,14 @@ def get_message_by_id(id):
 def remove_message_by_id(id):
   with all_messages_mutex:
     global all_messages
-    all_messages[:] = [msg for msg in all_messages if msg.id == id]      
+    all_messages[:] = [msg for msg in all_messages if msg.id == id]    
+
+
+def has_message_replies(msg):
+  for m in all_messages:
+    if m.reply_to is not None and m.reply_to.reply_to_msg_id == msg.id:
+      return True
+  return False            
 
 _admin_user_ids = []
 _admin_user_ids_lock = RLock()

@@ -22,7 +22,7 @@ def should_filter(message, content, repliedToMessage):
           _has_no_content(message) or \
           _has_no_content(repliedToMessage) or \
           _contains_forbidden_string(content) or \
-          _was_already_answered(message)
+          shared.has_message_replies(message)
 
 def _was_sent_by_admin(msg):
   if msg is None:
@@ -35,13 +35,6 @@ def _has_no_content(msg):
 
   content = shared.get_message_content(msg) 
   return content is None or len(content) == 0  
-
-def _was_already_answered(msg):
-  replies = msg.replies
-  if replies is None:
-    return False
-
-  return replies.replies > 0
 
 def _contains_forbidden_string(content):
   if content is None:
