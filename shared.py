@@ -41,6 +41,17 @@ def has_message_replies(msg):
 
   return False            
 
+def was_message_answered_by_admin(msg):
+  for m in all_messages:
+    if m.reply_to is not None and m.reply_to.reply_to_msg_id == msg.id and was_message_sent_by_admin(m):
+      return True
+
+    # there can't be replies before the message was sent  
+    if m.id == msg.id:
+      break
+
+  return False
+
 _admin_user_ids = []
 _admin_user_ids_lock = RLock()
 
@@ -51,6 +62,9 @@ def insert_admin(user_id):
 def is_admin(user_id):
   with _admin_user_ids_lock:
     return user_id in _admin_user_ids
+
+def was_message_sent_by_admin(msg):
+  return is_admin(msg.from_id.user_id)    
 
 confirmation_code_queue = queue.Queue()
 

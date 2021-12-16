@@ -22,12 +22,13 @@ def should_filter(message, content, repliedToMessage):
           _has_no_content(message) or \
           _has_no_content(repliedToMessage) or \
           _contains_forbidden_string(content) or \
-          shared.has_message_replies(message)
+          shared.has_message_replies(message) or \
+          shared.was_message_answered_by_admin(message)
 
 def _was_sent_by_admin(msg):
   if msg is None:
     return False
-  return shared.is_admin(msg.from_id.user_id)
+  return shared.was_message_sent_by_admin(msg)
 
 def _has_no_content(msg):
   if msg is None:
