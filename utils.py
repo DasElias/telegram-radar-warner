@@ -13,3 +13,10 @@ def contains_case_insensitive(text, searchFor):
 
 def equals_case_insensitive(a, b):
   return a.lower() == b.lower()  
+
+def to_human_readable_list(seq):
+  # Ref: https://stackoverflow.com/a/53981846/
+  seq = [str(s) for s in seq]
+  if len(seq) < 3:
+      return ' and '.join(seq)
+  return ', '.join(seq[:-1]) + ', and ' + seq[-1]    

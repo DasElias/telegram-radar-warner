@@ -6,10 +6,12 @@ import queue
 from filtering import should_filter
 import helpers
 import pytz
-from pytz import timezone#
+from pytz import timezone
+from datetime import datetime, timedelta
 import replacements
 import shared
 from shared import all_messages, all_messages_mutex, confirmation_code_queue, get_message_content
+import utils
 from filtering import should_filter
 
 tz = timezone(os.getenv("TIMEZONE"))
@@ -30,7 +32,8 @@ def mapMessage(msg):
     reply_message = replacements.replace_message(reply_message)
   
   # Build parsed message
-  parsed_message = date.strftime("%H:%M") + "\t "
+  time_string = date.strftime("%H:%M")
+  parsed_message = time_string + "\t "
 
   if reply_message is not None:
     parsed_message += "Antwort auf\"" + reply_message + "\"\t "
@@ -41,16 +44,56 @@ def mapMessage(msg):
     "originalMessage": truncated_orig_message,
     "id": msg.id,
     "date": date,
+    "timeString": time_string,
     "replyMessage": reply_message,
-    "parsedMessage": parsed_message
+    "parsedMessage": parsed_message,
+    "type": shared.get_message_type(msg)
   }  
 
+def get_additional_messages_object(only_media_messages):
+  length = len(only_media_messages)
+  if length > 0:
+    time_list = list(map(lambda msg: msg["timeString"], only_media_messages))
+
+    return {
+      "originalMessage": None,
+      "id": None,
+      "date": None,
+      "timeString": None,
+      "replyMessage": None,
+      "parsedMessage": get_additional_messages_prefix(only_media_messages) + " um " + utils.to_human_readable_list(time_list),
+      "type": "summary"
+    }
+  else:
+    return None  
+
+def get_additional_messages_prefix(only_media_messages):
+  length = len(only_media_messages)
+  if length == 1:
+    type = only_media_messages[0]["type"]
+    if type == "voice":
+      return "Weitere Sprachnachricht"
+    if type == "photo":
+      return "Weiteres Bild"
+    else:
+      return "Weitere Nachricht"
+  if length > 0:
+    if all(msg["type"] == "voice" for msg in only_media_messages):
+      return "Weitere Sprachnachrichten"
+    if all(msg["type"] == "photo" for msg in only_media_messages):
+      return "Weitere Bilder"
+    return "Weiter Sprachnachrichten und Bilder"
+  return None
+
 def get_all_messages(elems):
+  only_media_messages = []
   filtered_messsages = []
 
   with all_messages_mutex:
     i = 0
-    while len(filtered_messsages) < elems and len(all_messages) > i:
+    min_date = tz.localize(datetime.now()) - timedelta(hours = 1.5)
+    is_latest_date_after_min = True
+    while (len(filtered_messsages) < elems or is_latest_date_after_min) and len(all_messages) > i:
       msg = all_messages[i]
 
       reply_to_msg = None
@@ -59,9 +102,17 @@ def get_all_messages(elems):
 
       mapped = mapMessage(msg)
       if not should_filter(msg, mapped["parsedMessage"], reply_to_msg):
-        filtered_messsages.append(mapped)
+        if shared.is_multimedia_message_without_content(msg):
+          only_media_messages.append(mapped)
+        else:
+          filtered_messsages.append(mapped)
 
+      is_latest_date_after_min = msg.date > min_date
       i = i + 1  
+
+    additional_msg = get_additional_messages_object(only_media_messages)
+    if additional_msg is not None:
+      filtered_messsages.append(additional_msg)
 
     return filtered_messsages
 

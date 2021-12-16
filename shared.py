@@ -37,13 +37,26 @@ def is_admin(user_id):
 confirmation_code_queue = queue.Queue()
 
 def get_message_content(msg):
+  type = get_message_type(msg)
+  
+  content = getattr(msg, "message", None)
+  if type == "voice":
+    return "Sprachnachricht"
+  if type == "photo":
+    return "Bild"
+  return truncate_message(content)
+
+
+def get_message_type(msg):
   content = getattr(msg, "message", None)
   if (content is None or len(content) == 0) and is_voice_message(msg):
-    content = "Sprachnachricht"
+    return "voice"
   if (content is None or len(content) == 0) and is_photo(msg):
-    content = "Bild"
+    return "photo"     
+  return "text"  
 
-  return truncate_message(content)  
+def is_multimedia_message_without_content(msg):  
+  return getattr(msg, "message", None) != get_message_content(msg)
 
 def is_voice_message(msg):
   media = getattr(msg, "media", None)
