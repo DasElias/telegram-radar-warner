@@ -23,6 +23,11 @@ def get_message_by_id(id):
   with all_messages_mutex:
     return next((m for m in all_messages if m.id == id), None)
 
+def remove_message_by_id(id):
+  with all_messages_mutex:
+    global all_messages
+    all_messages[:] = [msg for msg in all_messages if msg.id == id]      
+
 _admin_user_ids = []
 _admin_user_ids_lock = RLock()
 

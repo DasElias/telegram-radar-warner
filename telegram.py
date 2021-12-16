@@ -29,6 +29,11 @@ async def telegram_server(client):
       all_messages.insert(0, message)
       print(message.stringify())
 
+  @client.on(events.MessageDeleted(chats=chat))
+  async def deleted_handler(event):
+    for msg_id in event.deleted_ids:
+      shared.remove_message_by_id(msg_id)
+
   async for part in client.iter_participants(chat, filter=ChannelParticipantsAdmins):
     shared.insert_admin(part.id)   
 
