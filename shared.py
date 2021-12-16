@@ -34,6 +34,11 @@ def has_message_replies(msg):
   for m in all_messages:
     if m.reply_to is not None and m.reply_to.reply_to_msg_id == msg.id:
       return True
+
+    # there can't be replies before the message was sent  
+    if m.id == msg.id:
+      break
+
   return False            
 
 _admin_user_ids = []
