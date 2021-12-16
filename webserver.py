@@ -36,7 +36,7 @@ def mapMessage(msg):
   parsed_message = time_string + "\t "
 
   if reply_message is not None:
-    parsed_message += "Antwort auf\"" + reply_message + "\"\t "
+    parsed_message += "Antwort auf \"" + reply_message + "\"\t "
 
   parsed_message += replaced_message
 
