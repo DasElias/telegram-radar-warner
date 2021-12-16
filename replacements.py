@@ -4,7 +4,7 @@ from utils import replace_case_insensitive
 _replacements = []
 
 def init_replacements():
-  with open("replacements.csv") as csvfile:
+  with open("replacements.csv", encoding="utf-8") as csvfile:
     reader = csv.reader(csvfile, delimiter=",")
     for row in reader:
       _replacements.append({
