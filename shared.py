@@ -1,6 +1,7 @@
 import queue
 import os
 from threading import Lock, RLock
+import utils
 
 _max_message_length = int(os.getenv("MAX_MESSAGE_LENGTH"))
 
@@ -26,7 +27,7 @@ def get_message_by_id(id):
 def remove_message_by_id(id):
   with all_messages_mutex:
     global all_messages
-    all_messages[:] = [msg for msg in all_messages if msg.id == id]    
+    all_messages = utils.filter_list(all_messages, lambda msg: msg.id == id)
 
 
 def has_message_replies(msg):

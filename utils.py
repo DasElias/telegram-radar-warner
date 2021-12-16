@@ -20,3 +20,10 @@ def to_human_readable_list(seq):
   if len(seq) < 3:
       return ' and '.join(seq)
   return ', '.join(seq[:-1]) + ', and ' + seq[-1]    
+
+def filter_list(list, should_sort_out):
+  filtered = []
+  for e in list:
+    if not should_sort_out(e):
+      filtered.append(e)
+  return filtered    
