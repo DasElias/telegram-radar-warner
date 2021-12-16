@@ -90,10 +90,8 @@ def web_server(api):
       
   @api.route('/messages/text', methods=['GET'])
   async def route_get_messages_text():
-    print("a")
     if not shared.is_logged_in():
       return "Bitte bestätige zuerst deinen Anmeldecode."
-    print("b")
 
     elems = helpers.try_parse_int(request.args.get("elems")) or default_elems_returned
     return get_messages_human_readable(elems)    
