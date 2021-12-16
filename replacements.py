@@ -18,8 +18,8 @@ def replace_message(str):
 
   str = " " + str + " "  
 
-  prefixes = [" ", "/", "-"]
-  suffixes = [" ", "/", "-"]
+  prefixes = [" ", "/", "-", ".", ":"]
+  suffixes = [" ", "/", "-", ".", ":"]
 
   for p in prefixes:
     for s in suffixes:
