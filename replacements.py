@@ -8,9 +8,12 @@ def init_replacements():
   with open("replacements.csv", encoding="utf-8") as csvfile:
     reader = csv.reader(csvfile, delimiter=",")
     for row in reader:
+      if len(row) == 0:
+        continue
+      
       _replacements.append({
         "from": row[0],
-        "to": row[1]
+        "to": row[1] if len(row) > 1 else ""
       })
 
 def replace_message(str):
