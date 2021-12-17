@@ -18,8 +18,8 @@ def to_human_readable_list(seq):
   # Ref: https://stackoverflow.com/a/53981846/
   seq = [str(s) for s in seq]
   if len(seq) < 3:
-      return ' and '.join(seq)
-  return ', '.join(seq[:-1]) + ', and ' + seq[-1]    
+      return ' und '.join(seq)
+  return ', '.join(seq[:-1]) + ', und ' + seq[-1]    
 
 def filter_list(list, should_sort_out):
   filtered = []
