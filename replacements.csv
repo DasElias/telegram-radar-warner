@@ -88,6 +88,10 @@ isig,vereist
 bedsietig,beidseitig
 durchsuacht,durchsucht
 dinn,drinnen
+1wagen,ein Wagen
+vo,von
+aufm,auf dem
+wos,wo es
 Abschtand,Abstandsmessung
 abstandsmessig,Abstandsmessung
 Afang,Anfang
@@ -162,6 +166,11 @@ Bestimmunga,Bestimmungen
 Beschtimmunga,Bestimmungen
 Einreisebestimmunga,Einreisebestimmungen
 Einreisebeschtimmunga,Einreisebedingungen
+krüz,Kreuz
+AMS,A.M.S
+kreutz,Kreuz
+rotkreutz,Rotkreuz
+Özoll,österreichischer Zoll
 AT,Österreich
 Bludaz,Bludenz
 Breagaz,Bregenz
@@ -210,6 +219,7 @@ muura,Mauren
 montlinga,Montlingen
 ruggel,Ruggell
 östetteich,Österreich
+langa,Langen
 abgholt,abgeholt
 aghoba,angehalten
 aheba,anhalten
@@ -251,7 +261,9 @@ stellan,stellen
 stohn,stehen
 stohnd,stehen
 stohndse,stehen sie
-stoht,stoht
+stot,steht
+stoht,steht
+ston,stehen
 stond,stehen
 stonde,stehen sie
 stondse,stehen sie
@@ -289,3 +301,7 @@ bestimma,bestimmen
 beschtimma,bestimmen
 strofa,strafen
 tuat,tut
+langat,reicht
+kontrollierand,kontrollieren
+bruck,Brücke
+apinnt,angepinnt
