@@ -28,3 +28,7 @@ pip install pytz
 ```
 pip install Aeros==0.3.1
 ```
+- emoji
+```
+pip install emoji
+```

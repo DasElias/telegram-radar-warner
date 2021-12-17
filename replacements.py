@@ -1,5 +1,6 @@
 import csv
 from utils import replace_case_insensitive
+import emoji
 
 _replacements = []
 
@@ -25,7 +26,9 @@ def replace_message(str):
     for s in suffixes:
       str = _replace_message_impl(str, p, s)
 
-  return str.strip()       
+  str = str.strip()       
+  str = emoji.get_emoji_regexp().sub(r'', str)
+  return str
 
 def _replace_message_impl(str, prefix, suffix):
   for r in _replacements:
