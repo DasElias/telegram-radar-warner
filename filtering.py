@@ -35,7 +35,7 @@ def _has_no_content(msg):
     return False
 
   content = shared.get_message_content(msg) 
-  return content is None or len(content) == 0  
+  return content is None or len(content) <= 1  
 
 def _contains_forbidden_string(content):
   if content is None:
