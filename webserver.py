@@ -178,3 +178,16 @@ def web_server(api):
       return "Key placed"
     except queue.Full:
       return "Queue is already full."  
+
+  @api.route('/messages/all', methods=['GET'])
+  async def route_get_messages_all():
+    if not shared.is_logged_in():
+      return "Bitte bestätige zuerst deinen Anmeldecode."
+
+    str = ""
+    with all_messages_mutex:
+      for m in all_messages:
+        str += m.stringify()
+        str += "<br>"  
+
+    return str
