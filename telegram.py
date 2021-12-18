@@ -25,9 +25,7 @@ async def telegram_server(client):
   @client.on(events.NewMessage(incoming=True, chats=chat))
   async def handler(event):
     message = event.message
-    with all_messages_mutex:
-      all_messages.insert(0, message)
-      all_messages.pop()
+    shared.insert_message_at_front(message)
 
   @client.on(events.MessageDeleted(chats=chat))
   async def deleted_handler(event):

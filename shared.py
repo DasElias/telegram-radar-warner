@@ -4,6 +4,7 @@ from threading import Lock, RLock
 import utils
 
 _max_message_length = int(os.getenv("MAX_MESSAGE_LENGTH"))
+_default_elems_fetched = int(os.getenv("DEFAULT_ELEMS_FETCHED"))
 
 _was_started_mutex = Lock()
 _was_started = False
@@ -20,6 +21,12 @@ def is_logged_in():
 all_messages_mutex = RLock()
 all_messages = []
 
+def insert_message_at_front(message):
+  with all_messages_mutex:
+    all_messages.insert(0, message)
+    if len(all_messages) > _default_elems_fetched:
+      all_messages.pop()
+
 def get_message_by_id(id):
   with all_messages_mutex:
     return next((m for m in all_messages if m.id == id), None)
@@ -33,13 +40,11 @@ def remove_message_by_id(id):
 def has_message_replies(msg):
   for m in all_messages:
     if m.reply_to is not None and m.reply_to.reply_to_msg_id == msg.id:
-      print(msg.message, " has replies ", m.reply_to, " ", msg.id)
       return True
 
     # there can't be replies before the message was sent  
     # if m.id == msg.id:
     #  break
-  print(msg.message, " has no replies ", m.reply_to, " ", msg.id)
   return False            
 
 def was_message_answered_by_admin(msg):
