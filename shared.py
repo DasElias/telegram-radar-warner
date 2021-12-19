@@ -24,8 +24,11 @@ all_messages = []
 def insert_message_at_front(message):
   with all_messages_mutex:
     all_messages.insert(0, message)
+    print(message.message, " was inserted, first element is now " + all_messages[0].message)
     if len(all_messages) > _default_elems_fetched:
-      all_messages.pop()
+      popped = all_messages.pop()
+      print("popped message " , popped.message)
+  print("insert finished")    
 
 def get_message_by_id(id):
   with all_messages_mutex:

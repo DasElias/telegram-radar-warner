@@ -25,6 +25,7 @@ async def telegram_server(client):
   @client.on(events.NewMessage(incoming=True, chats=chat))
   async def handler(event):
     message = event.message
+    print("new message received", message.message)
     shared.insert_message_at_front(message)
 
   @client.on(events.MessageDeleted(chats=chat))

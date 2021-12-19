@@ -126,6 +126,8 @@ def get_all_messages(elems):
           only_media_messages.append(mapped)
         else:
           append_or_concat_message(filtered_messsages, mapped)
+      else:
+        print("should filter: ", msg.message)    
 
       i = i + 1
       is_next_date_after_min = len(all_messages) > i and all_messages[i].date > min_date  
