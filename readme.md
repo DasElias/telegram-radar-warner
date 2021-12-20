@@ -32,3 +32,16 @@ pip install Aeros==0.3.1
 ```
 pip install emoji
 ```
+
+## How the replacement works
+This application not only takes the raw mesages from the Telegram chat and outputs them, but rather they are pre-processed. The following steps are performed:
+
+- if the message is only a picture, a voice message or another file, return a descriptive string
+- truncate the message to a maximum of of `MAX_MESSAGE_LENGTH` characters
+- replacements are performed as specified in `replacements.csv`
+- remove emojis
+- if a message was sent in reply to another one, replacements are done for this message too
+- the parsed message is assembled by concatenating the time of the message, the content of the reply_to message and the content of the current message
+- check whether the message should be filtered
+- if the last message was sent by the same user, concatenate the two messages
+- all messages, that are only multimedia messages without content are filtered too, but summaried to one single message which is appended at the end of the output
