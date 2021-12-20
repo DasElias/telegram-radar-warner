@@ -1,6 +1,6 @@
 import os
 from telethon import TelegramClient, events, sync
-from telethon.tl.types import ChannelParticipantsAdmins
+from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantsBots
 
 import shared
 from shared import confirmation_code_queue, on_successful_login
@@ -44,7 +44,10 @@ async def telegram_server(client):
     print(event.stringify()) 
 
   async for part in client.iter_participants(chat, filter=ChannelParticipantsAdmins):
-    shared.insert_admin(part.id)   
+    shared.insert_admin(part.id) 
+
+  async for part in client.iter_participants(chat, filter=ChannelParticipantsBots):
+    shared.insert_admin(part.id)      
 
   async for message in client.iter_messages(chat, limit=default_elems_fetched):
     shared.insert_message_at_back(message)
