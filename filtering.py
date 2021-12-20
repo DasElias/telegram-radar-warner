@@ -18,7 +18,6 @@ def _read_csv(filename):
 
 def should_filter(message, content, repliedToMessage):
   return _was_sent_by_admin(message) or \
-          _was_sent_by_admin(repliedToMessage) or \
           _has_no_content(message) or \
           _has_no_content(repliedToMessage) or \
           _contains_forbidden_string(content) or \
