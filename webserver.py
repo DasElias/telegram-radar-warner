@@ -10,7 +10,7 @@ from pytz import timezone
 from datetime import datetime, timedelta
 import replacements
 import shared
-from shared import all_messages, all_messages_mutex, confirmation_code_queue, get_message_content
+from shared import confirmation_code_queue, get_message_content
 import utils
 from filtering import should_filter
 
@@ -109,12 +109,12 @@ def get_all_messages(elems):
   only_media_messages = []
   filtered_messsages = []
 
-  with all_messages_mutex:
+  with shared.get_all_messages_mutex():
     i = 0
     min_date = tz.localize(datetime.now()) - timedelta(hours = 1.5)
     is_next_date_after_min = True
-    while (len(filtered_messsages) < elems or is_next_date_after_min) and len(all_messages) > i:
-      msg = all_messages[i]
+    while (len(filtered_messsages) < elems or is_next_date_after_min) and shared.get_amount_of_messages() > i:
+      msg = shared.get_nth_message(i)
 
       reply_to_msg = None
       if msg.reply_to is not None:
@@ -130,7 +130,7 @@ def get_all_messages(elems):
         print("should filter: ", msg.message)    
 
       i = i + 1
-      is_next_date_after_min = len(all_messages) > i and all_messages[i].date > min_date  
+      is_next_date_after_min = shared.get_amount_of_messages() > i and shared.get_nth_message(i).date > min_date  
 
     additional_msg = get_additional_messages_object(only_media_messages)
     if additional_msg is not None:
@@ -187,8 +187,8 @@ def web_server(api):
       return "Bitte bestätige zuerst deinen Anmeldecode."
 
     str = ""
-    with all_messages_mutex:
-      for m in all_messages:
+    with shared.get_all_messages_mutex():
+      for m in shared.get_all_messages():
         str += m.stringify()
         str += "<br>"  
 

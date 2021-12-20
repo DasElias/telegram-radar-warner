@@ -18,30 +18,45 @@ def is_logged_in():
   with _was_started_mutex:
     return _was_started
 
-all_messages_mutex = RLock()
-all_messages = []
+_all_messages_mutex = RLock()
+_all_messages = []
+
+def get_all_messages_mutex():
+  return _all_messages_mutex
+
+def get_all_messages():
+  return _all_messages
+
+def get_amount_of_messages():
+  return len(_all_messages)
+
+def get_nth_message(n):
+  return _all_messages[n]    
 
 def insert_message_at_front(message):
-  with all_messages_mutex:
-    all_messages.insert(0, message)
-    print(message.message, " was inserted, first element is now " + all_messages[0].message)
-    if len(all_messages) > _default_elems_fetched:
-      popped = all_messages.pop()
-      print("popped message " , popped.message)
-  print("insert finished")    
+  with _all_messages_mutex:
+    _all_messages.insert(0, message)
+    if len(_all_messages) > _default_elems_fetched:
+      _all_messages.pop()
+
+def insert_message_at_back(message):
+  with _all_messages_mutex:
+    _all_messages.append(message)
+    if len(_all_messages) > _default_elems_fetched:
+      _all_messages.pop()        
 
 def get_message_by_id(id):
-  with all_messages_mutex:
-    return next((m for m in all_messages if m.id == id), None)
+  with _all_messages_mutex:
+    return next((m for m in _all_messages if m.id == id), None)
 
 def remove_message_by_id(id):
-  with all_messages_mutex:
-    global all_messages
-    all_messages = utils.filter_list(all_messages, lambda msg: msg.id == id)
+  with _all_messages_mutex:
+    global _all_messages
+    _all_messages = utils.filter_list(_all_messages, lambda msg: msg.id == id)
 
 
 def has_message_replies(msg):
-  for m in all_messages:
+  for m in _all_messages:
     if m.reply_to is not None and m.reply_to.reply_to_msg_id == msg.id:
       return True
 
@@ -51,7 +66,7 @@ def has_message_replies(msg):
   return False            
 
 def was_message_answered_by_admin(msg):
-  for m in all_messages:
+  for m in _all_messages:
     if m.reply_to is not None and m.reply_to.reply_to_msg_id == msg.id and was_message_sent_by_admin(m):
       return True
 

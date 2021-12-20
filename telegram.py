@@ -3,7 +3,7 @@ from telethon import TelegramClient, events, sync
 from telethon.tl.types import ChannelParticipantsAdmins
 
 import shared
-from shared import all_messages, all_messages_mutex, confirmation_code_queue, on_successful_login
+from shared import confirmation_code_queue, on_successful_login
 
 phone_number = os.getenv("PHONE_NUMBER")
 channel_username=os.getenv("CHANNEL")
@@ -47,6 +47,5 @@ async def telegram_server(client):
     shared.insert_admin(part.id)   
 
   async for message in client.iter_messages(chat, limit=default_elems_fetched):
-    with all_messages_mutex:
-      all_messages.append(message)
+    shared.insert_message_at_back(message)
 
