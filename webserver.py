@@ -115,10 +115,7 @@ def get_all_messages(elems):
     is_next_date_after_min = True
     while (len(filtered_messsages) < elems or is_next_date_after_min) and shared.get_amount_of_messages() > i:
       msg = shared.get_nth_message(i)
-
-      reply_to_msg = None
-      if msg.reply_to is not None:
-        reply_to_msg = shared.get_message_by_id(msg.reply_to.reply_to_msg_id)
+      reply_to_msg = shared.get_reply_to_msg(msg)
 
       mapped = mapMessage(msg)
       if not should_filter(msg, mapped["parsedMessage"], reply_to_msg):

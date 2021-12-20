@@ -54,6 +54,10 @@ def remove_message_by_id(id):
     global _all_messages
     _all_messages = utils.filter_list(_all_messages, lambda msg: msg.id == id)
 
+def get_reply_to_msg(msg):
+  if msg.reply_to is not None:
+    return get_message_by_id(msg.reply_to.reply_to_msg_id)
+  return None  
 
 def has_message_replies(msg):
   for m in _all_messages:
