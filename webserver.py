@@ -13,6 +13,7 @@ import shared
 from shared import confirmation_code_queue, get_message_content
 import utils
 from filtering import should_filter
+import debug_logger
 
 tz = timezone(os.getenv("TIMEZONE"))
 default_elems_returned = int(os.getenv("DEFAULT_ELEMS_RETURNED"))
@@ -190,3 +191,7 @@ def web_server(api):
         str += "<br>"  
 
     return str
+
+  @api.route('/logs', methods=['GET'])
+  async def route_get_logs():
+    return jsonify(debug_logger.get_logs())

@@ -2,6 +2,7 @@ import os
 from telethon import TelegramClient, events, sync
 from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantsBots
 
+from debug_logger import log
 import shared
 from shared import confirmation_code_queue, on_successful_login
 
@@ -25,23 +26,26 @@ async def telegram_server(client):
   @client.on(events.NewMessage(incoming=True, chats=chat))
   async def handler(event):
     message = event.message
-    print("new message received", message.message)
+    log("new message received", message.message)
     shared.insert_message_at_front(message)
 
   @client.on(events.MessageDeleted(chats=chat))
   async def deleted_handler(event):
     for msg_id in event.deleted_ids:
+      log("MESSAGE", msg_id, "deleted")
       shared.remove_message_by_id(msg_id)
 
   @client.on(events.MessageEdited(chats=chat))
   async def edited_handler(event):
-    print("EVENT EDITED")
-    print(event.stringify())   
+    log("EVENT EDITED")
+    log(event.stringify())   
+    log("----")
 
   @client.on(events.ChatAction(chats=chat))
   async def edited_handler(event):
-    print("EVENT ChatAction")
-    print(event.stringify()) 
+    log("CHAT ACTION")
+    log(event.stringify())   
+    log("----")
 
   async for part in client.iter_participants(chat, filter=ChannelParticipantsAdmins):
     shared.insert_admin(part.id) 
