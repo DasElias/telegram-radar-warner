@@ -1,8 +1,11 @@
 import csv
 from utils import replace_case_insensitive
 import emoji
+import re
 
 _replacements = []
+_double_question_marks_regex = re.compile('\?+')
+_double_exclamation_marks_regex = re.compile('\!+')
 
 def init_replacements():
   with open("replacements.csv", encoding="utf-8") as csvfile:
@@ -31,6 +34,10 @@ def replace_message(str):
 
   str = str.strip()       
   str = emoji.get_emoji_regexp().sub(r'', str)
+
+  str = _double_question_marks_regex.sub('?', str)
+  str = _double_exclamation_marks_regex.sub('!', str)
+
   return str
 
 def _replace_message_impl(str, prefix, suffix):
