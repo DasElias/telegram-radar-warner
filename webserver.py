@@ -14,6 +14,7 @@ from shared import confirmation_code_queue, get_message_content
 import utils
 from filtering import should_filter
 import debug_logger
+import speak_chars
 
 tz = timezone(os.getenv("TIMEZONE"))
 default_elems_returned = int(os.getenv("DEFAULT_ELEMS_RETURNED"))
@@ -21,16 +22,20 @@ default_elems_returned = int(os.getenv("DEFAULT_ELEMS_RETURNED"))
 
 
 
-def mapMessage(msg):
+def mapMessage(msg, speak_punctuation):
   date = msg.date.replace(tzinfo=pytz.utc).astimezone(tz)
   truncated_orig_message = get_message_content(msg)
   replaced_message = replacements.replace_message(truncated_orig_message)
+  if speak_punctuation:
+    replaced_message = speak_chars.replace_to_speak_chars(replaced_message)
 
   # Build reply message
   reply_message = None
   if msg.reply_to is not None:
     reply_message = get_message_content(shared.get_message_by_id(msg.reply_to.reply_to_msg_id))
     reply_message = replacements.replace_message(reply_message)
+    if speak_punctuation:
+      reply_message = speak_chars.replace_to_speak_chars(reply_message)
   
   # Build parsed message
   time_string = date.strftime("%H:%M")
@@ -106,7 +111,7 @@ def append_or_concat_message(list, new_msg):
 
   list.append(new_msg)  
 
-def get_all_messages(elems):
+def get_all_messages(elems, speak_punctuation):
   only_media_messages = []
   filtered_messsages = []
 
@@ -118,7 +123,7 @@ def get_all_messages(elems):
       msg = shared.get_nth_message(i)
       reply_to_msg = shared.get_reply_to_msg(msg)
 
-      mapped = mapMessage(msg)
+      mapped = mapMessage(msg, speak_punctuation)
       if not should_filter(msg, mapped["parsedMessage"], reply_to_msg):
         if shared.is_multimedia_message_without_content(msg):
           only_media_messages.append(mapped)
@@ -136,9 +141,9 @@ def get_all_messages(elems):
 
     return filtered_messsages
 
-def get_messages_human_readable(elems):
+def get_messages_human_readable(elems, speak_punctuation):
   result_string = ""
-  for m in get_all_messages(elems):
+  for m in get_all_messages(elems, speak_punctuation):
     result_string += m["parsedMessage"]
     result_string += "<br>"
     result_string += "\r\n"
@@ -157,7 +162,8 @@ def web_server(api):
       })
 
     elems = helpers.try_parse_int(request.args.get("elems")) or default_elems_returned
-    return jsonify(get_all_messages(elems))
+    speak_punctuation = helpers.try_parse_bool(request.args.get("speakpunctuation"), False)
+    return jsonify(get_all_messages(elems, speak_punctuation))
       
   @api.route('/messages/text', methods=['GET'])
   async def route_get_messages_text():
@@ -165,7 +171,8 @@ def web_server(api):
       return "Bitte bestätige zuerst deinen Anmeldecode."
 
     elems = helpers.try_parse_int(request.args.get("elems")) or default_elems_returned
-    return get_messages_human_readable(elems)    
+    speak_punctuation = helpers.try_parse_bool(request.args.get("speakpunctuation"), False)
+    return get_messages_human_readable(elems, speak_punctuation)    
 
   @api.route('/login', methods=['GET'])
   async def route_login():

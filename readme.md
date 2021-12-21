@@ -40,6 +40,7 @@ This application not only takes the raw mesages from the Telegram chat and outpu
 - truncate the message to a maximum of of `MAX_MESSAGE_LENGTH` characters
 - replacements are performed as specified in `replacements.csv`
 - remove emojis
+- if `speakpunctuation` flag is set, replace some punctuation marks with their spoken equivalent
 - if a message was sent in reply to another one, replacements are done for this message too
 - the parsed message is assembled by concatenating the time of the message, the content of the reply_to message and the content of the current message
 - check whether the message should be filtered
