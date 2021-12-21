@@ -21,7 +21,7 @@ def should_filter(message, content, repliedToMessage):
           _has_no_content(message) or \
           _has_no_content(repliedToMessage) or \
           _contains_forbidden_string(content) or \
-          shared.has_message_replies(message) or \
+          (shared.has_message_replies(message) and not shared.is_reply_to_msg(message)) or \
           shared.was_message_answered_by_admin(message)
 
 def _was_sent_by_admin(msg):

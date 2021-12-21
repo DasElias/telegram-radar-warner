@@ -67,7 +67,10 @@ def has_message_replies(msg):
     # there can't be replies before the message was sent  
     if m.id == msg.id:
       break
-  return False            
+  return False
+
+def is_reply_to_msg(msg):
+  return msg.reply_to is not None           
 
 def was_message_answered_by_admin(msg):
   for m in _all_messages:
