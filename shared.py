@@ -65,8 +65,8 @@ def has_message_replies(msg):
       return True
 
     # there can't be replies before the message was sent  
-    # if m.id == msg.id:
-    #  break
+    if m.id == msg.id:
+      break
   return False            
 
 def was_message_answered_by_admin(msg):
