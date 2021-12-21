@@ -49,9 +49,11 @@ async def telegram_server(client):
 
   async for part in client.iter_participants(chat, filter=ChannelParticipantsAdmins):
     shared.insert_admin(part.id) 
+    log("admin", part.id)   
 
   async for part in client.iter_participants(chat, filter=ChannelParticipantsBots):
-    shared.insert_admin(part.id)      
+    shared.insert_admin(part.id)  
+    log("bot", part.id)       
 
   async for message in client.iter_messages(chat, limit=default_elems_fetched):
     shared.insert_message_at_back(message)
