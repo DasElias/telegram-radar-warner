@@ -7,7 +7,7 @@ def log(*msg):
   with _logs_mutex:
     str = ""
     for m in msg:
-      str += m + " "
+      str += str(m) + " "
     _logs.insert(0, str) 
     if len(_logs) > 250:
       _logs.pop()
