@@ -1,3 +1,18 @@
+def try_parse_int(s, val=None):
+  if s is None:
+    return val
+
+  try:
+    return int(s)
+  except ValueError:
+    return val
+
+def try_parse_bool(s, val=False):
+  if s is None:
+    return val
+
+  return s.lower() in ['true', '1', 't', 'y', 'yes']
+
 def replace_case_insensitive(text, old, new):
   idx = 0
   while idx < len(text):

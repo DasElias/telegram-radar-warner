@@ -4,7 +4,6 @@ from quart import request
 import os
 import queue
 from filtering import should_filter
-import helpers
 import pytz
 from pytz import timezone
 from datetime import datetime, timedelta
@@ -179,8 +178,8 @@ def web_server(api):
         "message": "Please login first."
       })
 
-    elems = helpers.try_parse_int(request.args.get("elems")) or default_elems_returned
-    speak_punctuation = helpers.try_parse_bool(request.args.get("speakpunctuation"), False)
+    elems = utils.try_parse_int(request.args.get("elems")) or default_elems_returned
+    speak_punctuation = utils.try_parse_bool(request.args.get("speakpunctuation"), False)
     return jsonify(get_all_messages(elems, speak_punctuation))
       
   @api.route('/messages/text', methods=['GET'])
@@ -188,8 +187,8 @@ def web_server(api):
     if not shared.is_logged_in():
       return "Bitte bestätige zuerst deinen Anmeldecode."
 
-    elems = helpers.try_parse_int(request.args.get("elems")) or default_elems_returned
-    speak_punctuation = helpers.try_parse_bool(request.args.get("speakpunctuation"), False)
+    elems = utils.try_parse_int(request.args.get("elems")) or default_elems_returned
+    speak_punctuation = utils.try_parse_bool(request.args.get("speakpunctuation"), False)
     return get_messages_human_readable(elems, speak_punctuation)    
 
   @api.route('/login', methods=['GET'])
