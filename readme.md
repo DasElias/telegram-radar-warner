@@ -45,4 +45,5 @@ This application not only takes the raw mesages from the Telegram chat and outpu
 - the parsed message is assembled by concatenating the time of the message, the content of the reply_to message and the content of the current message
 - check whether the message should be filtered
 - if the last message was sent by the same user, concatenate the two messages
+- when the next message after the last picked message would not be filtered, has text content and would be concatenated since it was sent by the same user, it gets concatenated too
 - all messages, that are only multimedia messages without content are filtered too, but summaried to one single message which is appended at the end of the output
