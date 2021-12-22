@@ -96,7 +96,7 @@ def get_additional_messages_prefix(only_media_messages):
     return "Weitere Sprachnachrichten und Bilder"
   return None
 
-def append_or_concat_message(list, new_msg):
+def try_concat_message(list, new_msg):
   if len(list) > 0:
     last_msg = list[-1]
     if last_msg["userId"] == new_msg["userId"]:
@@ -107,15 +107,19 @@ def append_or_concat_message(list, new_msg):
       last_msg["originalMessage"] = new_msg["originalMessage"] + " - " + last_msg["originalMessage"]
       # userId don't needs to be updated
       # time and date neither
-      return
+      return True
+  return False    
 
-  list.append(new_msg)  
+def append_or_concat_message(list, new_msg):
+  if not try_concat_message(list, new_msg):
+    list.append(new_msg)  
 
 def get_all_messages(elems, speak_punctuation):
   only_media_messages = []
   filtered_messsages = []
 
   with shared.get_all_messages_mutex():
+    # generate messages
     i = 0
     min_date = tz.localize(datetime.now()) - timedelta(hours = 1.5)
     is_next_date_after_min = True
@@ -133,8 +137,22 @@ def get_all_messages(elems, speak_punctuation):
         print("should filter: ", msg.message)    
 
       i = i + 1
-      is_next_date_after_min = shared.get_amount_of_messages() > i and shared.get_nth_message(i).date > min_date  
+      is_next_date_after_min = shared.get_amount_of_messages() > i and shared.get_nth_message(i).date > min_date
 
+    # when the last message was sent after another message of the same user, we want to concat the previous message too
+    while shared.get_amount_of_messages() > i:
+      msg = shared.get_nth_message(i)
+      reply_to_msg = shared.get_reply_to_msg(msg)
+      mapped = mapMessage(msg, speak_punctuation)
+
+      if should_filter(msg, mapped["parsedMessage"], reply_to_msg) or \
+         shared.is_multimedia_message_without_content(msg) or \
+         not try_concat_message(filtered_messsages, mapped):
+        break
+
+      i = i + 1    
+
+    # handle only media messages
     additional_msg = get_additional_messages_object(only_media_messages)
     if additional_msg is not None:
       filtered_messsages.append(additional_msg)
