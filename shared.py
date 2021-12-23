@@ -2,6 +2,7 @@ import queue
 import os
 from threading import Lock, RLock
 import utils
+from telethon.tl.types import MessageEntityBotCommand
 
 _max_message_length = int(os.getenv("MAX_MESSAGE_LENGTH"))
 _default_elems_fetched = int(os.getenv("DEFAULT_ELEMS_FETCHED"))
@@ -33,17 +34,11 @@ def get_amount_of_messages():
 def get_nth_message(n):
   return _all_messages[n]    
 
-def insert_message_at_front(message):
+def insert_message(message):
   with _all_messages_mutex:
-    _all_messages.insert(0, message)
+    utils.insert_sorted_list(_all_messages, message, lambda m: m.id)
     if len(_all_messages) > _default_elems_fetched:
       _all_messages.pop()
-
-def insert_message_at_back(message):
-  with _all_messages_mutex:
-    _all_messages.append(message)
-    if len(_all_messages) > _default_elems_fetched:
-      _all_messages.pop()        
 
 def get_message_by_id(id):
   with _all_messages_mutex:
@@ -59,6 +54,14 @@ def get_reply_to_msg(msg):
     return get_message_by_id(msg.reply_to.reply_to_msg_id)
   return None  
 
+def get_replies(msg):
+  replies = []
+  for m in _all_messages:
+    if m.reply_to is not None and m.reply_to.reply_to_msg_id == msg.id:
+      replies.append(m)
+
+  return replies    
+
 def has_message_replies(msg):
   for m in _all_messages:
     if m.reply_to is not None and m.reply_to.reply_to_msg_id == msg.id:
@@ -70,7 +73,14 @@ def has_message_replies(msg):
   return False
 
 def is_reply_to_msg(msg):
-  return msg.reply_to is not None           
+  return msg.reply_to is not None
+
+def contains_bot_command(msg):
+  if msg.entities is None:
+    return False
+    
+  return any(isinstance(e, MessageEntityBotCommand) for e in msg.entities)
+          
 
 def was_message_answered_by_admin(msg):
   for m in _all_messages:

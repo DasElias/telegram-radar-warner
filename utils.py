@@ -41,4 +41,11 @@ def filter_list(list, should_sort_out):
   for e in list:
     if not should_sort_out(e):
       filtered.append(e)
-  return filtered    
+  return filtered
+
+def insert_sorted_list(list, new_elem, get_key = lambda x:x):
+  for index, value in enumerate(list):
+    if get_key(value) < get_key(new_elem):
+      list.insert(index, new_elem)      
+      return
+  list.append(new_elem)  

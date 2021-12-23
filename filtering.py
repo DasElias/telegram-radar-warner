@@ -17,17 +17,30 @@ def _read_csv(filename):
   return list    
 
 def should_filter(message, content, repliedToMessage):
+  replies = shared.get_replies(message)
+  hasReplies = len(replies) > 0
+  wasAnsweredByAdmin = any(shared.was_message_sent_by_admin(m) for m in replies)
+  wasAnsweredByCommandEntity = any(shared.contains_bot_command(m) for m in replies)
+
   return _was_sent_by_admin(message) or \
           _has_no_content(message) or \
           _has_no_content(repliedToMessage) or \
           _contains_forbidden_string(content) or \
-          (shared.has_message_replies(message) and not shared.is_reply_to_msg(message)) or \
-          shared.was_message_answered_by_admin(message)
+          (hasReplies and not shared.is_reply_to_msg(message)) or \
+          wasAnsweredByAdmin or \
+          _contains_bot_command(message) or \
+          wasAnsweredByCommandEntity
 
 def _was_sent_by_admin(msg):
   if msg is None:
     return False
-  return shared.was_message_sent_by_admin(msg)
+  return shared.was_message_sent_by_admin(msg)  
+
+def _contains_bot_command(msg):
+  if msg is None:
+    return False
+
+  return shared.contains_bot_command(msg)  
 
 def _has_no_content(msg):
   if msg is None:

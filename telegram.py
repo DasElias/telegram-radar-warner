@@ -27,7 +27,7 @@ async def telegram_server(client):
   async def handler(event):
     message = event.message
     log("new message received", message.message)
-    shared.insert_message_at_front(message)
+    shared.insert_message(message)
 
   @client.on(events.MessageDeleted(chats=chat))
   async def deleted_handler(event):
@@ -56,5 +56,5 @@ async def telegram_server(client):
     log("bot", part.id)       
 
   async for message in client.iter_messages(chat, limit=default_elems_fetched):
-    shared.insert_message_at_back(message)
+    shared.insert_message(message)
 
