@@ -112,6 +112,22 @@ is,ist
 glei,gleich
 nam,einem
 and,an die
+wia,wie
+immerno,immer noch
+imerno,immer noch
+immrno,immer noch
+scharfa,scharfen
+vermuatlich,vermutlich
+bem,beim
+bim,beim
+no,noch
+zwo,zwei
+imma,immer
+immano,immer noch
+imma no,immer noch
+immr no,immer noch
+voram,vor dem
+vorm,vor dem
 Abschtand,Abstandsmessung
 abstandsmessig,Abstandsmessung
 Afang,Anfang
@@ -134,6 +150,7 @@ birkawiesa,Birkenwiese
 blauliacht,Blaulicht
 blitzr,Blitzer
 böxle,Box
+bullerei,Polizei
 burahof,Bauernhof
 büse,Busse
 bushaltestell,Bushaltestelle
@@ -148,18 +165,24 @@ fa.,Firma
 fahrban,Fahrbahn
 fahrtrichtig,Fahrtrichtung
 feald,Feld
+füahwer,Feuerwehr
 Fuaßgänger,Fußgänger
 führwehr,Feuerwehr
 führwehrhus,Feuerwehrhaus
+fürwehr,Feuerwehr
+fürwehrhus,Feuerwehrhaus
 gaschthus,Gasthaus
+gass,Gasse
 gh,Gasthaus
 graba,Graben
 grenz,Grenze
 grenzn,Grenze
 gschäft,Geschäft
+gschmierta,Geschmierter
 halla,Halle
 Huab,Hub
 Hüsle,Haus
+ifahrt,Einfahrt
 ikofszentrum,Einkaufszentrum
 ireise,Einreise
 isatz,Einsatz
@@ -173,11 +196,13 @@ kasta,Kasten
 kindergarta,Kindergarta
 kontrolla,Kontrolle
 kontrollana,Kontrollen
+kräuzung,Kreuzung
 kreisvrkehr,Kreisverkehr
 kreutz,Kreuz
 krüz,Kreuz
 krüzig,Kreuzung
 küah,Kühe
+kurva,Kurve
 lada,Laden
 landhus,Landhaus
 landhuus,Landhaus
@@ -185,6 +210,7 @@ leitplanka,Leitplanke
 leitschiana,Leitschiene
 lüt,Leute
 maa,Mann
+mäci,McDonalds
 mci,McDonalds
 Mecedes,Mercedes
 olympiahalla,Olympiahalle
@@ -202,6 +228,8 @@ rampa,Rampe
 raschtplatz,Rastplatz
 rettig,Rettung
 riad,Ried
+rich.,Richtung
+richtg.,Richtung
 richtunh,Richtung
 rotkreutz,Rotkreuz
 schneallstroß,Schnellstraße
@@ -220,13 +248,16 @@ stroß,Straße
 tanke,Tankstelle
 tankstell,Tankstelle
 tünnel,Tunnel
+überführig,Überführung
 uffahrt,Auffahrt
+unterführig,Unterführung
 viechr,Vieher
+zivibüssle,Zivilbüsschen
 zivilkollega,Zivilkollegen
 Zollhüsle,Zollhaus
 zona,Zone
-rich.,Richtung
-richtg.,Richtung
+leitschienamontage,Leitschienenmontage
+büsle,Büsschen
 AT,Österreich
 achsiedlig,Achsiedlung
 bingsr,Bingser
@@ -296,54 +327,102 @@ brozer,Brazer
 broz,Braz
 thüringa,Thüringen
 Nwnzing ,Nenzing
+wäldr,Bregenzerwälder
+breagazr,Bregenzer
+Kriessra,Kriessern
+schnüfis,Schnifis
 abgholt,abgeholt
 aghoba,angehalten
 aheba,anhalten
 annegfahra,hingefahren
 annegfara,hingefahren
+apinnt,angepinnt
+baua,bauen
 bauan,bauen
 beobachta,beobachten
+beschtimma,bestimmen
+bestimma,bestimmen
+bliba,bleiben
+blieba,bleiben
 blieban,bleiben
 blieband,bleiben
 blitza,blitzen
+bruck,Brücke
 bstellt,bestellt
+buckla,arbeiten
+durchsuacha,durchsuchen
 fahra,fahren
 fahrand,fahren
 fara,gefahren
+fotografiera,fotografieren
 gfahra,gefahren
 gfara,fahren
+gimpft,geimpft
+glaub,glaube
+glob,glaube
+globsch,glaubst
 goht,geht
 grumt,geräumt
 gschneallt,geknallt
+gseaha,gesehen
+gseha,gesehen
+gsi,gewesen
+gspeert,gesperrt
+gsperrt,gesperrt
 hänga,hängen
 hocka,sitzen
 hockt,sitzt
 hohlen,holen
+holln,holen
 hon,haben
 hond,haben
 honse,haben sie
 innegschossa,hineingeschossen
 innegschoßa,hineingeschossen
+kennan,kenne ihn
+kenns,kenne es
+kennse,kenne sie
+könnt,könnte
+kontrolliera,kontrollieren
+kontrollierand,kontrollieren
 krüzan,kreuzen
+künnt,könnte
+langat,reicht
+lot,lassen
+luagatr,schaut er
+luagats,schaut es
+luagtr,schaut er
+luagts,schaut es
 nean,nehmen
+radarna,radaren
 rauß,raus
 reglan,regeln
 reua,reuen
+säga,sagen
 schaua,schauen
+schiaba,schieben
 schüßa,schießen
 schüssa,schießen
 send,sind die
+sichs,es sich
+sitzan,sitzen
 stellan,stellen
 stohn,stehen
 stohnd,stehen
 stohndse,stehen sie
-stot,steht
 stoht,steht
 ston,stehen
 stond,stehen
 stonde,stehen sie
 stondse,stehen sie
+stonse,stehen sie
 stot,steht
+stot,steht
+strofa,strafen
+tuan,tuen
+tuat,tut
+uf weag,unterwegs
+uf weg,unterwegs
 ufbaua,aufbauen
 ufbua,aufbauen
 uffefahra,hinauffahren
@@ -353,12 +432,19 @@ ufghoba,aufgehalten
 ufheba,aufhalten
 ufpassa,aufpassen
 ufstella,aufstellen
+ufweag,unterwegs
+ufweg,unterwegs
 ussazüha,herausziehen
 ussegschossa,hinausgeschossen
 ussegschoßa,hineingeschossen
 usseziaha,herausziehen
 ussezoga,herausgezogen
 uufbaua,aufbauen
+vrfahra,verfahren
+vrhänckt,verhängt
+vrhängt,verhängt
+vrschteckt,versteckt
+vrsteckt,versteckt
 warta,warten
 woas,weiß
 woass,weiß
@@ -367,36 +453,13 @@ züha,ziehen
 zühan,ziehen
 zühen,ziehen
 zühn,ziehen
-tuan,tuen
-baua,bauen
-schiaba,schieben
-lot,lassen
-kontrolliera,kontrollieren
-durchsuacha,durchsuchen
-bestimma,bestimmen
-beschtimma,bestimmen
-strofa,strafen
-tuat,tut
-langat,reicht
-kontrollierand,kontrollieren
-bruck,Brücke
-apinnt,angepinnt
-radarna,radaren
-fotografiera,fotografieren
-gimpft,geimpft
-zwoaspurig,zweispurig
 zwaspurig,zweispurig
-könnt,könnte
-künnt,könnte
-vrsteckt,versteckt
-vrschteckt,versteckt
-sitzan,sitzen
-säga,sagen
-glaub,glaube
-glob,glaube
-globsch,glaubst
-gsperrt,gesperrt
-gspeert,gesperrt
-gsi,gewesen
+zwoaspurig,zweispurig
+holand,holen
+vermeida,vermeiden
+ufboua,aufbauen
+hot,hat
+umigstellt ,hingestellt
+ummigstellt,hingestellt
 :)
 ;)
