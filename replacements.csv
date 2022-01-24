@@ -128,6 +128,12 @@ imma no,immer noch
 immr no,immer noch
 voram,vor dem
 vorm,vor dem
+ou,auch
+nomol,noch einmal
+uffe,hinauf
+ge,nach
+gi,nach
+bi,bei
 Abschtand,Abstandsmessung
 abstandsmessig,Abstandsmessung
 Afang,Anfang
@@ -258,6 +264,10 @@ Zollhüsle,Zollhaus
 zona,Zone
 leitschienamontage,Leitschienenmontage
 büsle,Büsschen
+waga,Wagen
+stoa,Stein
+bhnhf,Bahnhof
+bhnf,Bahnhof
 AT,Österreich
 achsiedlig,Achsiedlung
 bingsr,Bingser
@@ -371,12 +381,16 @@ gspeert,gesperrt
 gsperrt,gesperrt
 hänga,hängen
 hocka,sitzen
+hockan,sitzen
 hockt,sitzt
 hohlen,holen
+holand,holen
+hollen,holen
 holln,holen
 hon,haben
 hond,haben
 honse,haben sie
+hot,hat
 innegschossa,hineingeschossen
 innegschoßa,hineingeschossen
 kennan,kenne ihn
@@ -393,6 +407,7 @@ luagatr,schaut er
 luagats,schaut es
 luagtr,schaut er
 luagts,schaut es
+messa,messen
 nean,nehmen
 radarna,radaren
 rauß,raus
@@ -424,6 +439,7 @@ tuat,tut
 uf weag,unterwegs
 uf weg,unterwegs
 ufbaua,aufbauen
+ufboua,aufbauen
 ufbua,aufbauen
 uffefahra,hinauffahren
 uffefara,hinauffahren
@@ -434,12 +450,15 @@ ufpassa,aufpassen
 ufstella,aufstellen
 ufweag,unterwegs
 ufweg,unterwegs
+umigstellt ,hingestellt
+ummigstellt,hingestellt
 ussazüha,herausziehen
 ussegschossa,hinausgeschossen
 ussegschoßa,hineingeschossen
 usseziaha,herausziehen
 ussezoga,herausgezogen
 uufbaua,aufbauen
+vermeida,vermeiden
 vrfahra,verfahren
 vrhänckt,verhängt
 vrhängt,verhängt
@@ -455,11 +474,15 @@ zühen,ziehen
 zühn,ziehen
 zwaspurig,zweispurig
 zwoaspurig,zweispurig
-holand,holen
-vermeida,vermeiden
-ufboua,aufbauen
-hot,hat
-umigstellt ,hingestellt
-ummigstellt,hingestellt
+holan,holen
+hollan,holen
+holland,holen
+hollend,holen
+ufgstellt,aufgestellt
+stoand,stehen
+züchan,ziehen
+züchand,ziehien
+züchen,ziehen
+züchand,ziehen
 :)
 ;)
