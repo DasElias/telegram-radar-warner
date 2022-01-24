@@ -77,6 +77,19 @@ def get_additional_messages_object(only_media_messages):
   else:
     return None  
 
+def get_message_for_empty():
+  return {
+    "originalMessage": None,
+    "id": None,
+    "dateTime": None,
+    "timeString": None,
+    "replyMessage": None,
+    "parsedMessage": "Keine Nachrichten vorhanden.",
+    "parsedMessageWithoutTime": "Keine Nachrichten vorhanden.",
+    "type": "no_msg",
+    "userId": None
+}
+
 def get_additional_messages_prefix(only_media_messages):
   length = len(only_media_messages)
   if length == 1:
@@ -169,6 +182,10 @@ def get_all_messages(params):
     additional_msg = get_additional_messages_object(only_media_messages)
     if additional_msg is not None:
       filtered_messsages.append(additional_msg)
+
+    # message when filtered_messages is empty
+    if len(filtered_messsages) == 0:
+      filtered_messsages.append(get_message_for_empty())
 
     return filtered_messsages
 
