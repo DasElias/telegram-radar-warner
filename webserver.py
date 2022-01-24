@@ -66,7 +66,7 @@ def get_additional_messages_object(only_media_messages):
     return {
       "originalMessage": None,
       "id": None,
-      "date": None,
+      "dateTime": None,
       "timeString": None,
       "replyMessage": None,
       "parsedMessage": msg,
@@ -113,7 +113,15 @@ def append_or_concat_message(list, new_msg):
   if not try_concat_message(list, new_msg):
     list.append(new_msg)  
 
-def get_all_messages(elems, speak_punctuation):
+def filter_mesages_before_timestamp(messages, last_query_timestamp):
+  if last_query_timestamp is None:
+    filtered_messages = messages
+  else:
+    filtered_messages = list(filter(lambda m: m["dateTime"] > last_query_timestamp, messages))
+
+  return filtered_messages
+
+def get_all_messages(params):
   only_media_messages = []
   filtered_messsages = []
 
@@ -122,11 +130,11 @@ def get_all_messages(elems, speak_punctuation):
     i = 0
     min_date = tz.localize(datetime.now()) - timedelta(hours = 1.5)
     is_next_date_after_min = True
-    while (len(filtered_messsages) < elems or is_next_date_after_min) and shared.get_amount_of_messages() > i:
+    while (len(filtered_messsages) < params["elems"] or is_next_date_after_min) and shared.get_amount_of_messages() > i:
       msg = shared.get_nth_message(i)
       reply_to_msg = shared.get_reply_to_msg(msg)
 
-      mapped = mapMessage(msg, speak_punctuation)
+      mapped = mapMessage(msg, params["speakPunctuation"])
       if not should_filter(msg, mapped["parsedMessage"], reply_to_msg):
         if shared.is_multimedia_message_without_content(msg):
           only_media_messages.append(mapped)
@@ -142,14 +150,20 @@ def get_all_messages(elems, speak_punctuation):
     while shared.get_amount_of_messages() > i:
       msg = shared.get_nth_message(i)
       reply_to_msg = shared.get_reply_to_msg(msg)
-      mapped = mapMessage(msg, speak_punctuation)
+      mapped = mapMessage(msg, params["speakPunctuation"])
 
       if should_filter(msg, mapped["parsedMessage"], reply_to_msg) or \
          shared.is_multimedia_message_without_content(msg) or \
          not try_concat_message(filtered_messsages, mapped):
         break
 
-      i = i + 1    
+      i = i + 1
+
+    # filter messages before last_query_timestamp
+    last_query_timestamp = params["lastQueryTimestamp"]
+    filtered_messsages = filter_mesages_before_timestamp(filtered_messsages, last_query_timestamp)
+    only_media_messages = filter_mesages_before_timestamp(only_media_messages, last_query_timestamp)
+
 
     # handle only media messages
     additional_msg = get_additional_messages_object(only_media_messages)
@@ -158,9 +172,9 @@ def get_all_messages(elems, speak_punctuation):
 
     return filtered_messsages
 
-def get_messages_human_readable(elems, speak_punctuation):
+def get_messages_human_readable(params):
   result_string = ""
-  for m in get_all_messages(elems, speak_punctuation):
+  for m in get_all_messages(params):
     result_string += m["parsedMessage"]
     result_string += "<br>"
     result_string += "\r\n"
@@ -171,6 +185,15 @@ def get_messages_human_readable(elems, speak_punctuation):
 
 
 def web_server(api):
+  def get_params_from_request(request):
+    last_query_timestamp_arg = None if request.args.get("querydate") is None else request.args.get("querydate").replace(" ", "+")
+
+    return {
+      "elems": utils.try_parse_int(request.args.get("elems")) or default_elems_returned,
+      "speakPunctuation": utils.try_parse_bool(request.args.get("speakpunctuation"), False),
+      "lastQueryTimestamp": utils.try_parse_date(last_query_timestamp_arg) 
+    }
+
   @api.route('/messages/json', methods=['GET'])
   async def route_get_messages_json():
     if not shared.is_logged_in():
@@ -178,18 +201,18 @@ def web_server(api):
         "message": "Please login first."
       })
 
-    elems = utils.try_parse_int(request.args.get("elems")) or default_elems_returned
-    speak_punctuation = utils.try_parse_bool(request.args.get("speakpunctuation"), False)
-    return jsonify(get_all_messages(elems, speak_punctuation))
+    params = get_params_from_request(request)
+
+    return jsonify(get_all_messages(params))
       
   @api.route('/messages/text', methods=['GET'])
   async def route_get_messages_text():
     if not shared.is_logged_in():
       return "Bitte bestätige zuerst deinen Anmeldecode."
 
-    elems = utils.try_parse_int(request.args.get("elems")) or default_elems_returned
-    speak_punctuation = utils.try_parse_bool(request.args.get("speakpunctuation"), False)
-    return get_messages_human_readable(elems, speak_punctuation)    
+    params = get_params_from_request(request)
+
+    return get_messages_human_readable(params)    
 
   @api.route('/login', methods=['GET'])
   async def route_login():

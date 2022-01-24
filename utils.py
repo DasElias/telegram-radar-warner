@@ -1,3 +1,6 @@
+from datetime import datetime
+import dateutil.parser
+
 def try_parse_int(s, val=None):
   if s is None:
     return val
@@ -12,6 +15,12 @@ def try_parse_bool(s, val=False):
     return val
 
   return s.lower() in ['true', '1', 't', 'y', 'yes']
+
+def try_parse_date(d, val=None):
+  try:
+    return dateutil.parser.isoparse(d)
+  except Exception as e:
+    return val
 
 def replace_case_insensitive(text, old, new):
   idx = 0
