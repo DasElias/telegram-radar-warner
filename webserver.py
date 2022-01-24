@@ -186,7 +186,7 @@ def get_messages_human_readable(params):
 
 def web_server(api):
   def get_params_from_request(request):
-    last_query_timestamp_arg = None if request.args.get("querydate") is None else request.args.get("querydate").replace(" ", "+")
+    last_query_timestamp_arg = None if request.args.get("lastQueryTs") is None else request.args.get("lastQueryTs").replace(" ", "+")
 
     return {
       "elems": utils.try_parse_int(request.args.get("elems")) or default_elems_returned,
