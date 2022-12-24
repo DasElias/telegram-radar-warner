@@ -23,16 +23,14 @@ default_elems_returned = int(os.getenv("DEFAULT_ELEMS_RETURNED"))
 
 def mapMessage(msg, speak_punctuation):
   date = msg.date.replace(tzinfo=pytz.utc).astimezone(tz)
-  truncated_orig_message = get_message_content(msg)
-  replaced_message = replacements.replace_message(truncated_orig_message)
+  replaced_message = msg.replaced_message_content
   if speak_punctuation:
     replaced_message = speak_chars.replace_to_speak_chars(replaced_message)
 
   # Build reply message
   reply_message = None
   if msg.reply_to is not None:
-    reply_message = get_message_content(shared.get_message_by_id(msg.reply_to.reply_to_msg_id))
-    reply_message = replacements.replace_message(reply_message)
+    reply_message = shared.get_message_by_id(msg.reply_to.reply_to_msg_id).replaced_message_content
     if speak_punctuation:
       reply_message = speak_chars.replace_to_speak_chars(reply_message)
   

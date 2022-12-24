@@ -3,6 +3,7 @@ import os
 from threading import Lock, RLock
 import utils
 from telethon.tl.types import MessageEntityBotCommand
+import replacements
 
 _max_message_length = int(os.getenv("MAX_MESSAGE_LENGTH"))
 _default_elems_fetched = int(os.getenv("DEFAULT_ELEMS_FETCHED"))
@@ -35,6 +36,9 @@ def get_nth_message(n):
   return _all_messages[n]    
 
 def insert_message(message):
+  msg_content = get_message_content(message)
+  message.replaced_message_content = replacements.replace_message(msg_content)
+
   with _all_messages_mutex:
     utils.insert_sorted_list(_all_messages, message, lambda m: m.id)
     if len(_all_messages) > _default_elems_fetched:
