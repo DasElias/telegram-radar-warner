@@ -26,12 +26,35 @@ pip install pytz
 ```
 - Aeros
 ```
+pip install hypercorn==0.12.0
 pip install Aeros==0.3.1
 ```
 - emoji
 ```
-pip install emoji
+pip install emoji==1.7.0
 ```
+- python-dateutil
+```
+pip install python-dateutil
+```
+
+## Python Virtual Environments
+
+It is recommended to run this project in a Python virtual environment. To do you, it is necessary to install venv and then create a new env first:
+
+```
+sudo apt-get install python3-venv
+python3 -m pip install virtualenv
+python3 -m venv radarwarner
+```
+
+Afterwards, it is possible to open the environment in the project folder by entering:
+
+```
+source radarwarner/bin/activate
+```
+
+In this mode, the dependencies can then be installed.
 
 ## How the replacement works
 This application not only takes the raw mesages from the Telegram chat and outputs them, but rather they are pre-processed. The following steps are performed:
