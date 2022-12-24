@@ -44,6 +44,12 @@ def insert_message(message):
     if len(_all_messages) > _default_elems_fetched:
       _all_messages.pop()
 
+def get_replaced_message_content(message):
+  if message is None:
+    return ""
+  else :
+    return message.replaced_message_content
+
 def get_message_by_id(id):
   with _all_messages_mutex:
     return next((m for m in _all_messages if m.id == id), None)
