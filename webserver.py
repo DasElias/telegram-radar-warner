@@ -209,6 +209,13 @@ def web_server(api):
       "lastQueryTimestamp": utils.try_parse_date(last_query_timestamp_arg) 
     }
 
+  def with_utf8_header(content):
+    return f"""
+      <html>
+        <head><meta charset='utf-8'></head>
+        <body>{content}</body>
+      </html>"""
+
   @api.route('/messages/json', methods=['GET'])
   async def route_get_messages_json():
     if not shared.is_logged_in():
@@ -223,11 +230,11 @@ def web_server(api):
   @api.route('/messages/text', methods=['GET'])
   async def route_get_messages_text():
     if not shared.is_logged_in():
-      return "Bitte bestätige zuerst deinen Anmeldecode."
+      return with_utf8_header("Bitte bestätige zuerst deinen Anmeldecode.")
 
     params = get_params_from_request(request)
-
-    return get_messages_human_readable(params)    
+    text = get_messages_human_readable(params)
+    return with_utf8_header(text)
 
   @api.route('/login', methods=['GET'])
   async def route_login():
