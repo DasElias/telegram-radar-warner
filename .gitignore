@@ -3,3 +3,4 @@
 *.session-journal
 venv
 __pycache__
+~$replacements.xlsx

@@ -8,6 +8,29 @@ The purpose of this Python is to query a Telegram chat for the recent messenges 
 3) On the first time you start the application, it is necessary to fill in your login code. You will receive this code via Telegram at the telephone number you entered in the ".env"-file. Call the GET-endpoint `/login?key=...` with the key you obtained.
 4) Afterwards, you are ready to query the recent messenges via the endpoints `/messages/text` and `/messages/json`. 
 
+## Python Virtual Environments
+
+It is recommended to run this project in a Python virtual environment. To do so, it is necessary to install venv and then create a new env first:
+
+```
+sudo apt-get install python3-venv
+python3 -m pip install virtualenv
+python3 -m venv radarwarner
+```
+
+Afterwards, it is possible to open the environment in the project folder by entering:
+
+```
+source radarwarner/bin/activate
+```
+
+On Windows, you can open the environment with:
+```	
+.\venv\Scripts\activate
+```
+
+In this mode, the dependencies can then be installed.
+
 ## Dependencies
 
 - python3
@@ -38,24 +61,6 @@ pip install emoji==1.7.0
 pip install python-dateutil
 ```
 
-## Python Virtual Environments
-
-It is recommended to run this project in a Python virtual environment. To do you, it is necessary to install venv and then create a new env first:
-
-```
-sudo apt-get install python3-venv
-python3 -m pip install virtualenv
-python3 -m venv radarwarner
-```
-
-Afterwards, it is possible to open the environment in the project folder by entering:
-
-```
-source radarwarner/bin/activate
-```
-
-In this mode, the dependencies can then be installed.
-
 ## How the replacement works
 This application not only takes the raw mesages from the Telegram chat and outputs them, but rather they are pre-processed. The following steps are performed:
 
@@ -70,3 +75,19 @@ This application not only takes the raw mesages from the Telegram chat and outpu
 - if the last message was sent by the same user, concatenate the two messages
 - when the next message after the last picked message would not be filtered, has text content and would be concatenated since it was sent by the same user, it gets concatenated too
 - all messages, that are only multimedia messages without content are filtered too, but summaried to one single message which is appended at the end of the output
+
+## replacements.csv
+The purpose of this file is to replace certain strings in the messages. It is a CSV file in the following format:
+```	
+<what to replace>,<replacement>
+```
+
+This file can be generated using the util script in the `generate_replacements`-folder (`generate.py`).
+
+To run this script, please enter the virtual environment as desribed above and install the additional dependencies:
+```
+pip install pandas
+pip install openpyxl
+```
+
+This script takes the file `source.xlsx` as input and generates the file `replacements.csv` as output. Using the `source.xlsx` file, it is possible to specify your own replacements. 
