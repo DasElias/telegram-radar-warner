@@ -4,7 +4,9 @@ The purpose of this Python is to query a Telegram chat for the recent messenges 
 
 ## Getting started
 1) [Log into your Telegram account](https://my.telegram.org/) and create a new application. On this site, you can obtain your API ID and your API hash.
-2) Rename the file ".env.example" to ".env" and fill in your credentials along with a link to the Telegram group and your phone number.
+2) Rename the file `.env.example` to `.env` and fill in your credentials along with the name of the chat to monitor or the invitation link to the Telegram group as well as your phone number.
+3) Activate your configured virtual environment and install all necessary dependencies (see below). 
+4) **Run the application** via `python main.py`. 
 3) On the first time you start the application, it is necessary to fill in your login code. You will receive this code via Telegram at the telephone number you entered in the ".env"-file. Call the GET-endpoint `/login?key=...` with the key you obtained.
 4) Afterwards, you are ready to query the recent messenges via the endpoints `/messages/text` and `/messages/json`. 
 

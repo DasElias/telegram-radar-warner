@@ -19,6 +19,9 @@ async def telegram_server(client):
   await client.start(phone_number, code_callback=get_confirmation_code)
   on_successful_login()
 
+  # even though variable is not used, important because it fills the entity cache
+  dialogs = await client.get_dialogs()
+
   # Get chat entity
   chat = await client.get_entity(channel_username)
 
