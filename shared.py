@@ -33,7 +33,13 @@ def get_amount_of_messages():
   return len(_all_messages)
 
 def get_nth_message(n):
-  return _all_messages[n]    
+  return _all_messages[n]
+
+def get_most_recent_message():
+  with _all_messages_mutex:
+    if len(_all_messages) > 0:
+      return _all_messages[0]
+    return None 
 
 def insert_message(message):
   msg_content = get_message_content(message)

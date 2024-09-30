@@ -14,6 +14,7 @@ import utils
 from filtering import should_filter
 import debug_logger
 import speak_chars
+from datetime import datetime
 
 tz = timezone(os.getenv("TIMEZONE"))
 default_elems_returned = int(os.getenv("DEFAULT_ELEMS_RETURNED"))
@@ -244,7 +245,7 @@ def web_server(api):
     try:
       key = request.args.get("key")
       confirmation_code_queue.put_nowait(key)
-      return "Key placed"
+      return "Key placed: " + key
     except queue.Full:
       return "Queue is already full."  
 
@@ -264,3 +265,23 @@ def web_server(api):
   @api.route('/logs', methods=['GET'])
   async def route_get_logs():
     return jsonify(debug_logger.get_logs())
+
+  @api.route('/status', methods=['GET'])
+  async def route_get_status():
+    # returns error if the most recent message is older than 24 hours, otherwise OK
+    if not shared.is_logged_in():
+      return "Bitte bestätige zuerst deinen Anmeldecode."
+
+    most_recent_message = shared.get_most_recent_message()
+    if most_recent_message is None:
+      return "No messages received yet."
+    
+    received_date = most_recent_message.date
+    elapsed = datetime.now(pytz.utc) - received_date
+    elapsed_seconds = elapsed.total_seconds()
+    max_elapsed_seconds = 24 * 60 * 60;
+
+    if elapsed_seconds < max_elapsed_seconds:
+      return "OK, elapsed: " + str(elapsed)
+    else:
+      return "No recent messages received"
