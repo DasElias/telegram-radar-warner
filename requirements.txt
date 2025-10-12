@@ -1,0 +1,6 @@
+Flask
+telethon
+python-dotenv
+pytz
+emoji==1.7.0
+python-dateutil

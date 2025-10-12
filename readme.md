@@ -35,32 +35,8 @@ In this mode, the dependencies can then be installed.
 
 ## Dependencies
 
-- python3
-- telethon
 ```
-python3 -m pip install --upgrade pip
-python3 -m pip install --upgrade telethon
-``` 
-- python-dotenv
-```
-pip install python-dotenv
-```
-- pytz
-```
-pip install pytz
-```
-- Aeros
-```
-pip install hypercorn==0.12.0
-pip install Aeros==0.3.1
-```
-- emoji
-```
-pip install emoji==1.7.0
-```
-- python-dateutil
-```
-pip install python-dateutil
+pip install -r requirements.txt
 ```
 
 ## How the replacement works

@@ -1,13 +1,10 @@
-from Aeros import WebServer
-from Aeros.misc import jsonify
-from quart import request
+from flask import jsonify, request
 import os
 import queue
 from filtering import should_filter
 import pytz
 from pytz import timezone
 from datetime import datetime, timedelta
-import replacements
 import shared
 from shared import confirmation_code_queue, get_message_content
 import utils
@@ -218,7 +215,7 @@ def web_server(api):
       </html>"""
 
   @api.route('/messages/json', methods=['GET'])
-  async def route_get_messages_json():
+  def route_get_messages_json():
     if not shared.is_logged_in():
       return jsonify({
         "message": "Please login first."
@@ -229,7 +226,7 @@ def web_server(api):
     return jsonify(get_all_messages(params))
       
   @api.route('/messages/text', methods=['GET'])
-  async def route_get_messages_text():
+  def route_get_messages_text():
     if not shared.is_logged_in():
       return with_utf8_header("Bitte bestätige zuerst deinen Anmeldecode.")
 
@@ -238,7 +235,7 @@ def web_server(api):
     return with_utf8_header(text)
 
   @api.route('/login', methods=['GET'])
-  async def route_login():
+  def route_login():
     if shared.is_logged_in():
       return "Server is already running"
 
@@ -250,7 +247,7 @@ def web_server(api):
       return "Queue is already full."  
 
   @api.route('/messages/all', methods=['GET'])
-  async def route_get_messages_all():
+  def route_get_messages_all():
     if not shared.is_logged_in():
       return "Bitte bestätige zuerst deinen Anmeldecode."
 
@@ -263,11 +260,11 @@ def web_server(api):
     return str
 
   @api.route('/logs', methods=['GET'])
-  async def route_get_logs():
+  def route_get_logs():
     return jsonify(debug_logger.get_logs())
 
   @api.route('/status', methods=['GET'])
-  async def route_get_status():
+  def route_get_status():
     # returns error if the most recent message is older than 24 hours, otherwise OK
     if not shared.is_logged_in():
       return "Bitte bestätige zuerst deinen Anmeldecode."

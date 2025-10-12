@@ -12,13 +12,7 @@ git clone https://github.com/DasElias/telegram-radar-warner.git /var/radarwarner
 python3 -m venv /var/radarwarner/app/venv
 source /var/radarwarner/app/venv/bin/activate
 python3 -m pip install --upgrade pip
-python3 -m pip install --upgrade telethon
-pip install python-dotenv
-pip install hypercorn==0.12.0
-pip install Aeros==0.3.1
-pip install emoji==1.7.0
-pip install pytz
-pip install python-dateutil
+pip install -r requirements.txt
 
 # create service
 sudo sh -c 'cat > /etc/systemd/system/radarwarner.service << EOF
